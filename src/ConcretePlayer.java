@@ -2,6 +2,7 @@ public class ConcretePlayer implements Player{
     @Override
     public boolean isPlayerOne() {
         return false;
+
     }
 
     @Override

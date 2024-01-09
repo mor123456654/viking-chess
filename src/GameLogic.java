@@ -7,7 +7,9 @@ public class GameLogic implements PlayableLogic{
     @Override
     public Piece getPieceAtPosition(Position position) {
         return null;
+
     }
+
 
     @Override
     public Player getFirstPlayer() {
