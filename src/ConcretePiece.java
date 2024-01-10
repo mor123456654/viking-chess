@@ -1,4 +1,4 @@
-public class ConcretePiece implements Piece{
+public class ConcretePiece implements Piece {
     @java.lang.Override
     public Player getOwner() {
         return null;
