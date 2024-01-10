@@ -1,7 +1,7 @@
 public class Position {
+
     private int row;
     private int col;
-
 
     Position(int row,int col){
         this.row= row;
