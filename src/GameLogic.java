@@ -9,6 +9,8 @@ public class GameLogic implements PlayableLogic{
     private ConcretePlayer firstPlayer = new ConcretePlayer(1,0);
     private ConcretePlayer secondPlayer = new ConcretePlayer(2,0);;
 
+    List<Position> corners = new ArrayList<Position>();
+
     List<Position> moves = new ArrayList<Position>();
 
 
@@ -16,6 +18,10 @@ public class GameLogic implements PlayableLogic{
     public boolean move(Position a, Position b) {
         if(isValid(a,b)) {
             moves.add(b);
+            //לבדוק אם זה הרק השחקן הראשון ואם זה היה המלך ואם כן איך לקרוא לו
+            if(b.isCorner() && firstPlayer.isPlayerOne()){
+                corners.add(b);
+            }
             return true;
         }
         
@@ -39,6 +45,9 @@ public class GameLogic implements PlayableLogic{
 
     @Override
     public boolean isGameFinished() {
+        if (checkIfKingGotAllCorners()) {
+            return true;
+        }
         return false;
     }
 
@@ -47,6 +56,7 @@ public class GameLogic implements PlayableLogic{
         if (moves.size() % 2 == 1){
             return true;
         }
+
         return false;
     }
 
@@ -64,6 +74,27 @@ public class GameLogic implements PlayableLogic{
     @Override
     public int getBoardSize() {
         return boardSize;
+    }
+
+    public boolean checkIfKingGotAllCorners() {
+        Position upLeftCorner = new Position(0, 0);
+        Position upRightCorner = new Position(0, 10);
+        Position downLeftCorner = new Position(10, 0);
+        Position downRightCorner = new Position(10, 10);
+
+        if (corners.contains(upLeftCorner) && corners.contains(upRightCorner) && corners.contains(downLeftCorner) && corners.contains(downRightCorner) ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean checkIfKingSurrounded() {
+
+        // להוסיץ מיקום המלך ולבדוק אם הוא מוקף מלמעלה ומלמטה בשחקנים של היריב
+
+        return false;
+        
     }
 
     public boolean isValid(Position a, Position b) {
@@ -91,18 +122,18 @@ public class GameLogic implements PlayableLogic{
 
 
         // case it is in the first place in the row/column
-        if (checkIfCurrentIsThefirstInRow || checkIfCurrentIsThefirstInColumn) {
-            return false;
-        }
+        // if (checkIfCurrentIsThefirstInRow || checkIfCurrentIsThefirstInColumn) {
+        //     return false;
+        // }
 
         // case it is in the last place in the in the row/column
-        else if (checkIfCurrentIsTheLastInRow || checkIfCurrentIsTheLastInColumn) {
-            return false;
-        }
+        // else if (checkIfCurrentIsTheLastInRow || checkIfCurrentIsTheLastInColumn) {
+        //     return false;
+        // }
 
-        else if (a.getRow() == b.getRow() + 1 && ) {
-            return false;
-        }
+        // else if (a.getRow() == b.getRow() + 1 ) {
+        //     return false;
+        // }
 
        
 

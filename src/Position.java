@@ -16,4 +16,12 @@ public class Position {
         return col;
     }
 
+    public boolean isCorner() {
+        if (row == 0 && col == 0 || row == 10 && col == 10 || row == 10 && col == 0||row == 0 && col == 10){
+            return true;
+        }
+
+        return false;
+    }
+
 }
