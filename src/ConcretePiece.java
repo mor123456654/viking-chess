@@ -19,4 +19,14 @@ public class ConcretePiece implements Piece {
     public String getType() {
         return type;
     }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    
 }

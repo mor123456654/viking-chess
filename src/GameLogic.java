@@ -9,19 +9,20 @@ public class GameLogic implements PlayableLogic{
     private ConcretePlayer firstPlayer = new ConcretePlayer(1,0);
     private ConcretePlayer secondPlayer = new ConcretePlayer(2,0);;
 
-    List<Position> corners = new ArrayList<Position>();
-
     List<Position> moves = new ArrayList<Position>();
 
+
+    GameLogic() {
+        createBoard(board);
+    }
 
     @Override
     public boolean move(Position a, Position b) {
         if(isValid(a,b)) {
             moves.add(b);
-            //לבדוק אם זה הרק השחקן הראשון ואם זה היה המלך ואם כן איך לקרוא לו
-            if(b.isCorner() && firstPlayer.isPlayerOne()){
-                corners.add(b);
-            }
+            board[b.getRow()][b.getCol()] = board[a.getRow()][a.getCol()];
+            board[a.getRow()][a.getCol()] = null;
+            
             return true;
         }
         
@@ -45,7 +46,9 @@ public class GameLogic implements PlayableLogic{
 
     @Override
     public boolean isGameFinished() {
-        if (checkIfKingGotAllCorners()) {
+        // check of last move was king & corner
+        // להוסיף מלך
+        if (moves.get(moves.size() - 1).isCorner() || checkIfKingSurrounded()) {
             return true;
         }
         return false;
@@ -53,40 +56,29 @@ public class GameLogic implements PlayableLogic{
 
     @Override
     public boolean isSecondPlayerTurn() {
-        if (moves.size() % 2 == 1){
-            return true;
-        }
-
-        return false;
+        return (moves.size() % 2 == 1);
     }
 
     @Override
     public void reset() {
-        board = new Piece[boardSize][boardSize];
         moves = new ArrayList<Position>();
+        board = new Piece[boardSize][boardSize];
+        createBoard(board);
+
     }
 
     @Override
     public void undoLastMove() {
-        moves.remove(moves.size() - 1);
+        Position lastMove =moves.remove(moves.size() - 1);
+        int lastMoveRow = lastMove.getRow();
+        int lastMoveCol = lastMove.getCol();
+
+        board[lastMoveRow][lastMoveCol] = getPieceAtPosition(lastMove);
     }
 
     @Override
     public int getBoardSize() {
         return boardSize;
-    }
-
-    public boolean checkIfKingGotAllCorners() {
-        Position upLeftCorner = new Position(0, 0);
-        Position upRightCorner = new Position(0, 10);
-        Position downLeftCorner = new Position(10, 0);
-        Position downRightCorner = new Position(10, 10);
-
-        if (corners.contains(upLeftCorner) && corners.contains(upRightCorner) && corners.contains(downLeftCorner) && corners.contains(downRightCorner) ) {
-            return true;
-        }
-
-        return false;
     }
 
     public boolean checkIfKingSurrounded() {
@@ -97,47 +89,121 @@ public class GameLogic implements PlayableLogic{
         
     }
 
-    public boolean isValid(Position a, Position b) {
+    public boolean isValid(Position startingPosition, Position destinationPosition) {
 
-        if (b == a) {
+        Piece currentPiece = getPieceAtPosition(startingPosition);
+
+        // case the current piece isn't exist
+        if(currentPiece == null){
+            return false;
+       }
+
+       // case the position hasn't change
+        if (startingPosition.equals(destinationPosition)) {
             return false;
         }
 
-         boolean checkIfCurrentIsTheFirstInRow = a.getRow() == b.getRow() - 1 && a.getRow() == 0;
-         boolean checkIfCurrentIsTheFirstInColumn = a.getCol() == b.getCol() - 1 && a.getCol() == 0;
+        // case the new position is not in the board limits
+        if (destinationPosition.getRow() < 0 || destinationPosition.getRow() >= boardSize || destinationPosition.getCol() < 0 || destinationPosition.getCol() >= boardSize) {
+            return false;
+        }
 
-         boolean checkIfCurrentIsTheLastInRow = a.getRow() == b.getRow() + 1 && a.getRow() == 10;
-         boolean checkIfCurrentIsTheLastInColumn = a.getCol() == b.getCol() + 1 && a.getCol() == 10;
-
-        //  boolean isInNextRow = a.getRow() == b.getRow() + 1;
-        //  boolean isInNextColumn = a.getCol() == b.getCol() + 1;
-
-        //  boolean isInPreviousRow = a.getRow() == b.getRow() - 1;
-        //  boolean isInPreviousColumn = a.getCol() == b.getCol() - 1;
-
-        //  boolean isInTheSameRow = a.getRow() == b.getRow();
-        //  boolean isInTheSameColumn = a.getRow() == b.getRow();
+        // case it's not in a straight line
+        if (!(startingPosition.getRow() == destinationPosition.getRow() || startingPosition.getCol() == destinationPosition.getCol())) {
+            return false;
+        }
 
 
+        // if (startingPosition.getRow() == destinationPosition.getRow() ){
+        //     int bigCol=Math.max(startingPosition.getCol(), destinationPosition.getCol());
+        //     int smallCol=Math.min(startingPosition.getCol(), destinationPosition.getCol());
+    
+        //     for (int i=smallCol; i<=bigCol; i++) {
+        //         Position check = new Position(destinationPosition.getRow(), i);
+        //         Piece current = getPieceAtPosition(check);
 
-
-        // case it is in the first place in the row/column
-        // if (checkIfCurrentIsThefirstInRow || checkIfCurrentIsThefirstInColumn) {
-        //     return false;
+        //         if(getPieceAtPosition(check) != null){
+        //             return false;
+        //        }
+        //         // if(board[destinationPosition.getRow()][i]!=null) {
+        //         //     return false;
+        //         // }
+        //     }
         // }
 
-        // case it is in the last place in the in the row/column
-        // else if (checkIfCurrentIsTheLastInRow || checkIfCurrentIsTheLastInColumn) {
-        //     return false;
+        // else if(startingPosition.getCol() == destinationPosition.getCol() ){
+        //     int bigRow=Math.max(startingPosition.getRow(), destinationPosition.getRow());
+        //     int smallRow=Math.min(startingPosition.getRow(), destinationPosition.getRow());
+        
+        //     for (int i=smallRow; i<=bigRow; i++) {
+        //         if(board[i][destinationPosition.getCol()].getOwner() != null) {
+        //             return false;
+        //         }
+        //     }
+        // }
+        
+        // else {
+            // for (int i=startingPosition.getRow(); i>destinationPosition.getRow(); i--) {
+            //     if(board[i][destinationPosition.getCol()] != null) {
+            //         return false;
+            //     }
+            // }
         // }
 
-        // else if (a.getRow() == b.getRow() + 1 ) {
-        //     return false;
-        // }
-
-       
-
-
+        int startRow = startingPosition.getRow();
+        int startCol = startingPosition.getCol();
+        int endRow = destinationPosition.getRow();
+        int endCol = destinationPosition.getCol();
+        
+        // Check for horizontal movement
+        if (startRow == endRow) {
+            int step = (endCol > startCol) ? 1 : -1;
+            for (int i = startCol + step; i != endCol; i += step) {
+                if (board[startRow][i] != null) {
+                    return false; // Path is not clear
+                }
+            }
+        }
+        // Check for vertical movement
+        else if (startCol == endCol) {
+            int step = (endRow > startRow) ? 1 : -1;
+            for (int i = startRow + step; i != endRow; i += step) {
+                if (board[i][startCol] != null) {
+                    return false; // Path is not clear
+                }
+            }
+        }
+        
         return true;
+    }
+
+    public void createBoard(Piece[][] board) {
+
+        board[5][9] = new Pawn(secondPlayer);
+        board[9][5] = new Pawn(secondPlayer);
+        board[1][5] = new Pawn(secondPlayer);
+        board[5][1] = new Pawn(secondPlayer);
+
+        for (int i=3; i<=7;i++){
+            board[0][i] = new Pawn(secondPlayer);
+            board[i][0] = new Pawn(secondPlayer);
+            board[10][i] = new Pawn(secondPlayer);
+            board[i][10] = new Pawn(secondPlayer);
+        }
+
+
+        for (int i=3; i<=7;i++){
+            board[5][i] = new Pawn(firstPlayer);
+            board[i][5] = new Pawn(firstPlayer);
+        }
+
+        for (int i=4; i<=6;i++){
+            board[4][i] = new Pawn(firstPlayer);
+            board[i][4] = new Pawn(firstPlayer);
+            board[i][6] = new Pawn(firstPlayer);
+
+        }
+
+        board[5][5] = new King(firstPlayer);
     }
 }

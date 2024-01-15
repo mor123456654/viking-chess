@@ -23,4 +23,9 @@ public class ConcretePlayer implements Player{
     public int getWins() {
         return wins;
     }
+
+
+    public void setWins(int winsNumber) {
+         this.wins = winsNumber;
+    }
 }
