@@ -56,7 +56,7 @@ public class GameLogic implements PlayableLogic{
 
     @Override
     public boolean isSecondPlayerTurn() {
-        return (moves.size() % 2 == 1);
+        return (moves.size() % 2 == 0);
     }
 
     @Override
@@ -90,13 +90,25 @@ public class GameLogic implements PlayableLogic{
     }
 
     public boolean isValid(Position startingPosition, Position destinationPosition) {
+        
+        int startRow = startingPosition.getRow();
+int startCol = startingPosition.getCol();
+int endRow = destinationPosition.getRow();
+int endCol = destinationPosition.getCol();
 
-        Piece currentPiece = getPieceAtPosition(startingPosition);
+int rowStep;
+int colStep;
 
-        // case the current piece isn't exist
-        if(currentPiece == null){
-            return false;
-       }
+Piece currentPiece = getPieceAtPosition(startingPosition);
+// case the current piece isn't exist
+if(currentPiece == null){
+    return false;
+}
+
+if ((isSecondPlayerTurn() && currentPiece.getOwner() != secondPlayer) ||
+    (!isSecondPlayerTurn() && currentPiece.getOwner() != firstPlayer)) {
+    return false;
+}
 
        // case the position hasn't change
         if (startingPosition.equals(destinationPosition)) {
@@ -104,76 +116,48 @@ public class GameLogic implements PlayableLogic{
         }
 
         // case the new position is not in the board limits
-        if (destinationPosition.getRow() < 0 || destinationPosition.getRow() >= boardSize || destinationPosition.getCol() < 0 || destinationPosition.getCol() >= boardSize) {
+        if (endRow < 0 || endRow >= boardSize || endCol < 0 || endCol >= boardSize) {
             return false;
         }
 
         // case it's not in a straight line
-        if (!(startingPosition.getRow() == destinationPosition.getRow() || startingPosition.getCol() == destinationPosition.getCol())) {
+        if (!(startRow == endRow || startCol == endCol)) {
             return false;
         }
 
 
-        // if (startingPosition.getRow() == destinationPosition.getRow() ){
-        //     int bigCol=Math.max(startingPosition.getCol(), destinationPosition.getCol());
-        //     int smallCol=Math.min(startingPosition.getCol(), destinationPosition.getCol());
-    
-        //     for (int i=smallCol; i<=bigCol; i++) {
-        //         Position check = new Position(destinationPosition.getRow(), i);
-        //         Piece current = getPieceAtPosition(check);
 
-        //         if(getPieceAtPosition(check) != null){
-        //             return false;
-        //        }
-        //         // if(board[destinationPosition.getRow()][i]!=null) {
-        //         //     return false;
-        //         // }
-        //     }
-        // }
 
-        // else if(startingPosition.getCol() == destinationPosition.getCol() ){
-        //     int bigRow=Math.max(startingPosition.getRow(), destinationPosition.getRow());
-        //     int smallRow=Math.min(startingPosition.getRow(), destinationPosition.getRow());
-        
-        //     for (int i=smallRow; i<=bigRow; i++) {
-        //         if(board[i][destinationPosition.getCol()].getOwner() != null) {
-        //             return false;
-        //         }
-        //     }
-        // }
-        
-        // else {
-            // for (int i=startingPosition.getRow(); i>destinationPosition.getRow(); i--) {
-            //     if(board[i][destinationPosition.getCol()] != null) {
-            //         return false;
-            //     }
-            // }
-        // }
+if (endRow > startRow) {
+    rowStep = 1;
+} else if (endRow < startRow) {
+    rowStep = -1;
+} else {
+    rowStep = 0;
+}
 
-        int startRow = startingPosition.getRow();
-        int startCol = startingPosition.getCol();
-        int endRow = destinationPosition.getRow();
-        int endCol = destinationPosition.getCol();
-        
-        // Check for horizontal movement
-        if (startRow == endRow) {
-            int step = (endCol > startCol) ? 1 : -1;
-            for (int i = startCol + step; i != endCol; i += step) {
-                if (board[startRow][i] != null) {
-                    return false; // Path is not clear
-                }
-            }
+if (endCol > startCol) {
+    colStep = 1;
+} else if (endCol < startCol) {
+    colStep = -1;
+} else {
+    colStep = 0;
+}
+
+// Check for horizontal or vertical movement
+if ((rowStep != 0 && colStep == 0) || (rowStep == 0 && colStep != 0)) {
+    for (int i = 1; i <= Math.max(Math.abs(endRow - startRow), Math.abs(endCol - startCol)); i++) {
+        int currentRow = startRow + i * rowStep;
+        int currentCol = startCol + i * colStep;
+        if (board[currentRow][currentCol] != null) {
+            return false; // Path is not clear
         }
-        // Check for vertical movement
-        else if (startCol == endCol) {
-            int step = (endRow > startRow) ? 1 : -1;
-            for (int i = startRow + step; i != endRow; i += step) {
-                if (board[i][startCol] != null) {
-                    return false; // Path is not clear
-                }
-            }
-        }
-        
+    }
+} else {
+    return false; // Invalid movement (not horizontal or vertical)
+}
+isGameFinished();
+destinationPosition.isEating();
         return true;
     }
 

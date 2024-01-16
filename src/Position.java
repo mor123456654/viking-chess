@@ -24,4 +24,8 @@ public class Position {
         return false;
     }
 
+    public void isEating(){
+        
+    }
+
 }
