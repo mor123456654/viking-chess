@@ -1,16 +1,19 @@
 import java.util.ArrayList;
+import java.util.Stack;
 import java.util.List;
+import java.util.Map;
 
 public class GameLogic implements PlayableLogic{
 
     private int boardSize = 11;
-    private Piece[][] board = new Piece[boardSize][boardSize];
+    private ConcretePiece[][] board = new ConcretePiece[boardSize][boardSize];
 
     private ConcretePlayer firstPlayer = new ConcretePlayer(1,0);
     private ConcretePlayer secondPlayer = new ConcretePlayer(2,0);;
 
     List<Position> moves = new ArrayList<Position>();
-
+    List<Position> movesprev = new ArrayList<Position>();
+    List<ConcretePiece> prevPiece = new ArrayList<ConcretePiece>();
 
     GameLogic() {
         createBoard(board);
@@ -19,7 +22,9 @@ public class GameLogic implements PlayableLogic{
     @Override
     public boolean move(Position a, Position b) {
         if(isValid(a,b)) {
+            prevPiece.add((ConcretePiece) getPieceAtPosition(a));
             moves.add(b);
+            movesprev.add(a);
             board[b.getRow()][b.getCol()] = board[a.getRow()][a.getCol()];
             board[a.getRow()][a.getCol()] = null;
             if(isGameFinished()){
@@ -54,12 +59,14 @@ public class GameLogic implements PlayableLogic{
         Piece currentPiece = getPieceAtPosition(getLast());
         if (getLast().isCorner() && currentPiece.getType().equals("King")) {
             firstPlayer.addWin();
+            reset();
             return true;
         }
-        // if( checkIfKingSurrounded()) {
-        //     secondPlayer.addWin();
-        //     return true;
-        // }
+//         if( checkIfKingSurrounded()) {
+//             secondPlayer.addWin();
+//              reset();
+//             return true;
+//         }
             return false;
     }
 
@@ -71,18 +78,29 @@ public class GameLogic implements PlayableLogic{
     @Override
     public void reset() {
         moves = new ArrayList<Position>();
-        board = new Piece[boardSize][boardSize];
+        board = new ConcretePiece[boardSize][boardSize];
         createBoard(board);
 
     }
 
     @Override
     public void undoLastMove() {
-        Position lastMove = getLast();
-        int lastMoveRow = lastMove.getRow();
-        int lastMoveCol = lastMove.getCol();
-
-        board[lastMoveRow][lastMoveCol] = getPieceAtPosition(lastMove);
+        if (movesprev.size() >= 2) {
+            Position lastMove = movesprev.get(movesprev.size() - 1);
+            int lastMoveRow = lastMove.getRow();
+            int lastMoveCol = lastMove.getCol();
+            Position oldMove = moves.get(moves.size() - 1);
+            int oldMoveRow = oldMove.getRow();
+            int oldMoveCol = oldMove.getCol();
+            ConcretePiece pieceAtLastMove = prevPiece.getLast();
+            board[lastMoveRow][lastMoveCol] = pieceAtLastMove;
+            board[oldMoveRow][oldMoveCol] = null;
+            movesprev.remove(movesprev.size() - 1);
+            moves.remove(moves.size() - 1);
+            prevPiece.remove(prevPiece.size() - 1);
+        } else if (movesprev.size() == 1) {
+            reset();
+        }
     }
 
     @Override
@@ -95,23 +113,36 @@ public class GameLogic implements PlayableLogic{
      }
 
     public boolean checkIfKingSurrounded() {
-
+        int redAround=0;
         Position king=isKingNear();
         int kRow = king.getRow();
         int kCol = king.getCol();
-        Piece currentPiece = getPieceAtPosition(getLast());
         if(isSecondPlayerTurn()){
-            if (kRow!=-1&& kCol!=-1){
-
+            if (kRow!=0 && kCol!=0){
+                if (!board[kRow+1][kCol].getOwner().isPlayerOne()) {
+                        redAround++;
+                }
+                if (!board[kRow-1][kCol].getOwner().isPlayerOne()) {
+                        redAround++;
+                }
+                if (!board[kRow][kCol+1].getOwner().isPlayerOne()) {
+                    redAround++;
+                }
+                if (!board[kRow][kCol-1].getOwner().isPlayerOne()) {
+                    redAround++;
+                }
+                if ((king.isNearWall() && redAround==3)||((!king.isNearWall() && redAround==4))) {
+                      return true;
+                  }
+                }
             }
-        }
         return false;
     }
 
     public Position isKingNear() {
         int pRow = getLast().getRow();
         int pCol = getLast().getCol();
-        Position king=new Position(-1,-1);
+        Position king=new Position(0,0);
         if (board[pRow+1][pCol].getType().equals("King")) {
             king.setPosition(pRow+1,pCol);
             return king;

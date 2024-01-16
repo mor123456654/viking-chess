@@ -28,6 +28,9 @@ public class Position {
 
         return false;
     }
+    public boolean isNearWall() {
+        return row - 1 == -1 || col - 1 == -1 || row + 1 == 11 || col + 1 == 11;
+    }
 
     public void isEating(){
 
