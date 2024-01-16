@@ -25,7 +25,7 @@ public class GameLogic implements PlayableLogic{
             if(isGameFinished()){
 
             }
-//destinationPosition.isEating(destinationPosition);
+        //destinationPosition.isEating(destinationPosition);
             return true;
         }
         
@@ -95,7 +95,8 @@ public class GameLogic implements PlayableLogic{
      }
 
     public boolean checkIfKingSurrounded() {
-Position king=isKingNear();
+
+        Position king=isKingNear();
         int kRow = king.getRow();
         int kCol = king.getCol();
         Piece currentPiece = getPieceAtPosition(getLast());
@@ -106,6 +107,7 @@ Position king=isKingNear();
         }
         return false;
     }
+
     public Position isKingNear() {
         int pRow = getLast().getRow();
         int pCol = getLast().getCol();
@@ -132,23 +134,23 @@ Position king=isKingNear();
     public boolean isValid(Position startingPosition, Position destinationPosition) {
         
         int startRow = startingPosition.getRow();
-int startCol = startingPosition.getCol();
-int endRow = destinationPosition.getRow();
-int endCol = destinationPosition.getCol();
+        int startCol = startingPosition.getCol();
+        int endRow = destinationPosition.getRow();
+        int endCol = destinationPosition.getCol();
 
-int rowStep;
-int colStep;
+        int rowStep;
+        int colStep;
 
-Piece currentPiece = getPieceAtPosition(startingPosition);
-// case the current piece isn't exist
-if(currentPiece == null){
-    return false;
-}
+        Piece currentPiece = getPieceAtPosition(startingPosition);
+        // case the current piece isn't exist
+        if(currentPiece == null){
+            return false;
+        }
 
-if ((isSecondPlayerTurn() && currentPiece.getOwner() != secondPlayer) ||
-    (!isSecondPlayerTurn() && currentPiece.getOwner() != firstPlayer)) {
-    return false;
-}
+        if ((isSecondPlayerTurn() && currentPiece.getOwner() != secondPlayer) ||
+            (!isSecondPlayerTurn() && currentPiece.getOwner() != firstPlayer)) {
+            return false;
+        }
 
        // case the position hasn't change
         if (startingPosition.equals(destinationPosition)) {
@@ -165,37 +167,34 @@ if ((isSecondPlayerTurn() && currentPiece.getOwner() != secondPlayer) ||
             return false;
         }
 
-
-
-
-if (endRow > startRow) {
-    rowStep = 1;
-} else if (endRow < startRow) {
-    rowStep = -1;
-} else {
-    rowStep = 0;
-}
-
-if (endCol > startCol) {
-    colStep = 1;
-} else if (endCol < startCol) {
-    colStep = -1;
-} else {
-    colStep = 0;
-}
-
-// Check for horizontal or vertical movement
-if ((rowStep != 0 && colStep == 0) || (rowStep == 0 && colStep != 0)) {
-    for (int i = 1; i <= Math.max(Math.abs(endRow - startRow), Math.abs(endCol - startCol)); i++) {
-        int currentRow = startRow + i * rowStep;
-        int currentCol = startCol + i * colStep;
-        if (board[currentRow][currentCol] != null) {
-            return false; // Path is not clear
+        if (endRow > startRow) {
+            rowStep = 1;
+        } else if (endRow < startRow) {
+            rowStep = -1;
+        } else {
+            rowStep = 0;
         }
-    }
-} else {
-    return false; // Invalid movement (not horizontal or vertical)
-}
+
+        if (endCol > startCol) {
+            colStep = 1;
+        } else if (endCol < startCol) {
+            colStep = -1;
+        } else {
+            colStep = 0;
+        }
+
+        // Check for horizontal or vertical movement
+        if ((rowStep != 0 && colStep == 0) || (rowStep == 0 && colStep != 0)) {
+            for (int i = 1; i <= Math.max(Math.abs(endRow - startRow), Math.abs(endCol - startCol)); i++) {
+                int currentRow = startRow + i * rowStep;
+                int currentCol = startCol + i * colStep;
+                if (board[currentRow][currentCol] != null) {
+                    return false; // Path is not clear
+                }
+            }
+        } else {
+            return false; // Invalid movement (not horizontal or vertical)
+        }
         return true;
     }
 
