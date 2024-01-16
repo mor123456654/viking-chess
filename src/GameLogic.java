@@ -27,9 +27,8 @@ public class GameLogic implements PlayableLogic{
             movesprev.add(a);
             board[b.getRow()][b.getCol()] = board[a.getRow()][a.getCol()];
             board[a.getRow()][a.getCol()] = null;
-            if(isGameFinished()){
-
-            }
+            if(isGameFinished())
+                reset();
         //destinationPosition.isEating(destinationPosition);
             return true;
         }
@@ -59,14 +58,12 @@ public class GameLogic implements PlayableLogic{
         Piece currentPiece = getPieceAtPosition(getLast());
         if (getLast().isCorner() && currentPiece.getType().equals("King")) {
             firstPlayer.addWin();
-            reset();
             return true;
         }
-//         if( checkIfKingSurrounded()) {
-//             secondPlayer.addWin();
-//              reset();
-//             return true;
-//         }
+         if(checkIfKingSurrounded()) {
+             secondPlayer.addWin();
+             return true;
+         }
             return false;
     }
 
@@ -113,55 +110,71 @@ public class GameLogic implements PlayableLogic{
      }
 
     public boolean checkIfKingSurrounded() {
-        int redAround=0;
-        Position king=isKingNear();
+        int redAround = 0;
+        Position king = isKingNear();
         int kRow = king.getRow();
         int kCol = king.getCol();
-        if(isSecondPlayerTurn()){
-            if (kRow!=0 && kCol!=0){
-                if (!board[kRow+1][kCol].getOwner().isPlayerOne()) {
-                        redAround++;
-                }
-                if (!board[kRow-1][kCol].getOwner().isPlayerOne()) {
-                        redAround++;
-                }
-                if (!board[kRow][kCol+1].getOwner().isPlayerOne()) {
+
+        if (isSecondPlayerTurn() && kRow != -1 && kCol != -1) {
+            if (kRow + 1 < boardSize && board[kRow + 1][kCol] != null) {
+                if (!board[kRow + 1][kCol].getOwner().isPlayerOne()) {
                     redAround++;
-                }
-                if (!board[kRow][kCol-1].getOwner().isPlayerOne()) {
-                    redAround++;
-                }
-                if ((king.isNearWall() && redAround==3)||((!king.isNearWall() && redAround==4))) {
-                      return true;
-                  }
                 }
             }
+            if (kRow - 1 >= 0 && board[kRow - 1][kCol] != null) {
+                if (!board[kRow - 1][kCol].getOwner().isPlayerOne()) {
+                    redAround++;
+                }
+            }
+            if (kCol + 1 < boardSize && board[kRow][kCol + 1] != null) {
+                if (!board[kRow][kCol + 1].getOwner().isPlayerOne()) {
+                    redAround++;
+                }
+            }
+            if (kCol - 1 >= 0 && board[kRow][kCol - 1] != null) {
+                if (!board[kRow][kCol - 1].getOwner().isPlayerOne()) {
+                    redAround++;
+                }
+            }
+            return (king.isNearWall() && redAround == 3) || (redAround == 4);
+        }
+
         return false;
     }
 
     public Position isKingNear() {
         int pRow = getLast().getRow();
         int pCol = getLast().getCol();
-        Position king=new Position(0,0);
-        if (board[pRow+1][pCol].getType().equals("King")) {
-            king.setPosition(pRow+1,pCol);
-            return king;
+        Position king = new Position(-1, -1);
+
+        if (pRow + 1 < boardSize && board[pRow + 1][pCol] != null) {
+            if (board[pRow + 1][pCol].getType().equals("King")) {
+                king.setPosition(pRow + 1, pCol);
+                return king;
+            }
         }
-        if(board[pRow-1][pCol].getType().equals("King")){
-            king.setPosition(pRow-1,pCol);
-            return king;
+        if (pRow - 1 >= 0 && board[pRow - 1][pCol] != null) {
+            if (board[pRow - 1][pCol].getType().equals("King")) {
+                king.setPosition(pRow - 1, pCol);
+                return king;
+            }
         }
-        if(board[pRow][pCol+1].getType().equals("King")){
-            king.setPosition(pRow,pCol-1);
-            return king;
+        if (pCol + 1 < boardSize && board[pRow][pCol + 1] != null) {
+            if (board[pRow][pCol + 1].getType().equals("King")) {
+                king.setPosition(pRow, pCol + 1);
+                return king;
+            }
         }
-        if(board[pRow][pCol-1].getType().equals("King")){
-            king.setPosition(pRow,pCol-1);
-            return king;
+        if (pCol - 1 >= 0 && board[pRow][pCol - 1] != null) {
+            if (board[pRow][pCol - 1].getType().equals("King")) {
+                king.setPosition(pRow, pCol - 1);
+                return king;
+            }
         }
 
         return king;
     }
+
     public boolean isValid(Position startingPosition, Position destinationPosition) {
         
         int startRow = startingPosition.getRow();
