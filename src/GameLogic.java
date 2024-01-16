@@ -130,9 +130,9 @@ public class GameLogic implements PlayableLogic{
         return false;
     }
 
-    private int isSame(int Row, int Col,Player owner) {
+    private int isSame(int Col, int Row,Player owner) {
         if (Col >= 0 && Col < boardSize && Row >= 0 && Row < boardSize &&
-                board[Row][Col] != null && board[Row][Col].getOwner().equals(owner)) {
+                board[Col][Row] != null && board[Col][Row].getOwner().equals(owner)) {
             return 1;
         }
         return 0;
