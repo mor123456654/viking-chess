@@ -56,7 +56,7 @@ public class GameLogic implements PlayableLogic{
         // check of last move was king & corner
         // להוסיף מלך
         Piece currentPiece = getPieceAtPosition(getLast());
-        if (getLast().isCorner() && currentPiece.getType().equals("King")) {
+        if (getLast().isCorner() && currentPiece.getType().equals("♚")) {
             firstPlayer.addWin();
             return true;
         }
@@ -145,25 +145,25 @@ public class GameLogic implements PlayableLogic{
         Position king = new Position(-1, -1);
 
         if (pCol + 1 < boardSize && board[pCol + 1][pRow] != null) {
-            if (board[pCol + 1][pRow].getType().equals("King")) {
+            if (board[pCol + 1][pRow].getType().equals("♚")) {
                 king.setPosition(pCol + 1, pRow);
                 return king;
             }
         }
         if (pCol - 1 >= 0 && board[pCol - 1][pRow] != null) {
-            if (board[pCol - 1][pRow].getType().equals("King")) {
+            if (board[pCol - 1][pRow].getType().equals("♚")) {
                 king.setPosition(pCol - 1, pRow);
                 return king;
             }
         }
         if (pRow + 1 < boardSize && board[pCol][pRow + 1] != null) {
-            if (board[pCol][pRow + 1].getType().equals("King")) {
+            if (board[pCol][pRow + 1].getType().equals("♚")) {
                 king.setPosition(pCol, pRow + 1);
                 return king;
             }
         }
         if (pRow - 1 >= 0 && board[pCol][pRow - 1] != null) {
-            if (board[pCol][pRow - 1].getType().equals("King")) {
+            if (board[pCol][pRow - 1].getType().equals("♚")) {
                 king.setPosition(pCol, pRow - 1);
                 return king;
             }
