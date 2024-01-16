@@ -22,7 +22,10 @@ public class GameLogic implements PlayableLogic{
             moves.add(b);
             board[b.getRow()][b.getCol()] = board[a.getRow()][a.getCol()];
             board[a.getRow()][a.getCol()] = null;
-            
+            if(isGameFinished()){
+
+            }
+//destinationPosition.isEating(destinationPosition);
             return true;
         }
         
@@ -48,10 +51,16 @@ public class GameLogic implements PlayableLogic{
     public boolean isGameFinished() {
         // check of last move was king & corner
         // להוסיף מלך
-        if (moves.get(moves.size() - 1).isCorner() || checkIfKingSurrounded()) {
+        Piece currentPiece = getPieceAtPosition(moves.getLast());
+        if (moves.getLast().isCorner() && currentPiece.getType().equals("King")) {
+            firstPlayer.addWin();
             return true;
         }
-        return false;
+        if( checkIfKingSurrounded()) {
+            secondPlayer.addWin();
+            return true;
+        }
+            return false;
     }
 
     @Override
@@ -69,7 +78,7 @@ public class GameLogic implements PlayableLogic{
 
     @Override
     public void undoLastMove() {
-        Position lastMove =moves.remove(moves.size() - 1);
+        Position lastMove =moves.removeLast();
         int lastMoveRow = lastMove.getRow();
         int lastMoveCol = lastMove.getCol();
 
@@ -82,13 +91,40 @@ public class GameLogic implements PlayableLogic{
     }
 
     public boolean checkIfKingSurrounded() {
+Position king=isKingNear();
+        int kRow = king.getRow();
+        int kCol = king.getCol();
+        Piece currentPiece = getPieceAtPosition(moves.getLast());
+        if(isSecondPlayerTurn()){
+            if (kRow!=-1&& kCol!=-1){
 
-        // להוסיץ מיקום המלך ולבדוק אם הוא מוקף מלמעלה ומלמטה בשחקנים של היריב
-
+            }
+        }
         return false;
-        
     }
+    public Position isKingNear() {
+        int pRow = moves.getLast().getRow();
+        int pCol = moves.getLast().getCol();
+        Position king=new Position(-1,-1);
+        if (board[pRow+1][pCol].getType().equals("King")) {
+            king.setPosition(pRow+1,pCol);
+            return king;
+        }
+        if(board[pRow-1][pCol].getType().equals("King")){
+            king.setPosition(pRow-1,pCol);
+            return king;
+        }
+        if(board[pRow][pCol+1].getType().equals("King")){
+            king.setPosition(pRow,pCol-1);
+            return king;
+        }
+        if(board[pRow][pCol-1].getType().equals("King")){
+            king.setPosition(pRow,pCol-1);
+            return king;
+        }
 
+        return king;
+    }
     public boolean isValid(Position startingPosition, Position destinationPosition) {
         
         int startRow = startingPosition.getRow();
@@ -156,8 +192,6 @@ if ((rowStep != 0 && colStep == 0) || (rowStep == 0 && colStep != 0)) {
 } else {
     return false; // Invalid movement (not horizontal or vertical)
 }
-isGameFinished();
-destinationPosition.isEating();
         return true;
     }
 
