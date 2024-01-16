@@ -245,32 +245,59 @@ public class GameLogic implements PlayableLogic{
 
 
     public void createBoard(Piece[][] board) {
+        // create secondPlayer players
+        board[0][3] = new Pawn(secondPlayer, "A7");
+    
+        board[0][4] = new Pawn( secondPlayer, "A9");
+        board[0][5] = new Pawn(secondPlayer, "A11");
+        board[0][6] = new Pawn(secondPlayer, "A15");
+        board[0][7] = new Pawn(secondPlayer, "A17");
 
-        board[5][9] = new Pawn(secondPlayer);
-        board[9][5] = new Pawn(secondPlayer);
-        board[1][5] = new Pawn(secondPlayer);
-        board[5][1] = new Pawn(secondPlayer);
+        board[1][5] = new Pawn(secondPlayer, "A12");
 
-        for (int i=3; i<=7;i++){
-            board[0][i] = new Pawn(secondPlayer);
-            board[i][0] = new Pawn(secondPlayer);
-            board[10][i] = new Pawn(secondPlayer);
-            board[i][10] = new Pawn(secondPlayer);
-        }
+        board[10][3] = new Pawn(secondPlayer, "A8");
+        board[10][4] = new Pawn(secondPlayer, "A10");
+        board[10][5] = new Pawn(secondPlayer, "A14");
+        board[10][6] = new Pawn(secondPlayer, "A16");
+        board[10][7] = new Pawn(secondPlayer, "A18");
+
+        board[9][5] = new Pawn(secondPlayer, "A13");
 
 
-        for (int i=3; i<=7;i++){
-            board[5][i] = new Pawn(firstPlayer);
-            board[i][5] = new Pawn(firstPlayer);
-        }
+        board[3][0] = new Pawn(secondPlayer, "A1");
+        board[4][0] = new Pawn(secondPlayer, "A2");
+        board[5][0] = new Pawn(secondPlayer, "A3");
+        board[6][0] = new Pawn(secondPlayer, "A4");
+        board[7][0] = new Pawn(secondPlayer, "A5");
 
-        for (int i=4; i<=6;i++){
-            board[4][i] = new Pawn(firstPlayer);
-            board[i][4] = new Pawn(firstPlayer);
-            board[i][6] = new Pawn(firstPlayer);
+        board[5][9] = new Pawn(secondPlayer, "A19");
 
-        }
 
-        board[5][5] = new King(firstPlayer);
+        board[3][10] = new Pawn(secondPlayer, "A20");
+        board[4][10] = new Pawn(secondPlayer, "A21");
+        board[5][10] = new Pawn(secondPlayer, "A22");
+        board[6][10] = new Pawn(secondPlayer, "A23");
+        board[7][10] = new Pawn(secondPlayer, "A24");
+
+        board[5][1] = new Pawn(secondPlayer, "A6");
+        
+        // create firstPlayer players
+        board[5][3] = new Pawn(firstPlayer, "D1");
+        board[4][4] = new Pawn(firstPlayer, "D2");
+        board[5][4] = new Pawn(firstPlayer, "D3");
+        board[6][4] = new Pawn(firstPlayer, "D4");
+
+        board[3][5] = new Pawn(firstPlayer, "D5");
+        board[4][5] = new Pawn(firstPlayer, "D6");
+        board[6][5] = new Pawn(firstPlayer, "D8");
+        board[7][5] = new Pawn(firstPlayer, "D9");
+
+        board[4][6] = new Pawn(firstPlayer, "D10");
+        board[5][6] = new Pawn(firstPlayer, "D11");
+        board[6][6] = new Pawn(firstPlayer, "D12");
+        board[5][7] = new Pawn(firstPlayer, "D13");
+
+        board[5][5] = new King(firstPlayer, "K7");
+
     }
 }

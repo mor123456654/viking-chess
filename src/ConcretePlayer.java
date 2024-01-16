@@ -21,11 +21,11 @@ public class ConcretePlayer implements Player{
     public void addWin() {
         this.wins ++;
     }
+
     @Override
     public int getWins() {
         return wins;
     }
-
 
     public void setWins(int winsNumber) {
          this.wins = winsNumber;

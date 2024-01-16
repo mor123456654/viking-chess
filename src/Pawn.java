@@ -1,7 +1,15 @@
 public class Pawn extends ConcretePiece {
 
-    Pawn(ConcretePlayer owner) {
-        super("&#9823;" ,owner);
+    private String playerName;
+
+    Pawn(ConcretePlayer owner, String playerName) {
+        super("Pawn" ,owner);
+        this.playerName = playerName;
     }
+
+    public String getPlayerName(){
+        return playerName;
+    }
+
 
 }

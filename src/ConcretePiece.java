@@ -28,5 +28,6 @@ public class ConcretePiece implements Piece {
         this.type = type;
     }
 
-    
+   
+
 }
