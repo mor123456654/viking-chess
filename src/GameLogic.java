@@ -51,15 +51,15 @@ public class GameLogic implements PlayableLogic{
     public boolean isGameFinished() {
         // check of last move was king & corner
         // להוסיף מלך
-        Piece currentPiece = getPieceAtPosition(moves.getLast());
-        if (moves.getLast().isCorner() && currentPiece.getType().equals("King")) {
+        Piece currentPiece = getPieceAtPosition(getLast());
+        if (getLast().isCorner() && currentPiece.getType().equals("King")) {
             firstPlayer.addWin();
             return true;
         }
-        if( checkIfKingSurrounded()) {
-            secondPlayer.addWin();
-            return true;
-        }
+        // if( checkIfKingSurrounded()) {
+        //     secondPlayer.addWin();
+        //     return true;
+        // }
             return false;
     }
 
@@ -78,7 +78,7 @@ public class GameLogic implements PlayableLogic{
 
     @Override
     public void undoLastMove() {
-        Position lastMove =moves.removeLast();
+        Position lastMove = getLast();
         int lastMoveRow = lastMove.getRow();
         int lastMoveCol = lastMove.getCol();
 
@@ -90,11 +90,15 @@ public class GameLogic implements PlayableLogic{
         return boardSize;
     }
 
+    public Position getLast() {
+        return moves.get(moves.size() - 1);
+     }
+
     public boolean checkIfKingSurrounded() {
 Position king=isKingNear();
         int kRow = king.getRow();
         int kCol = king.getCol();
-        Piece currentPiece = getPieceAtPosition(moves.getLast());
+        Piece currentPiece = getPieceAtPosition(getLast());
         if(isSecondPlayerTurn()){
             if (kRow!=-1&& kCol!=-1){
 
@@ -103,8 +107,8 @@ Position king=isKingNear();
         return false;
     }
     public Position isKingNear() {
-        int pRow = moves.getLast().getRow();
-        int pCol = moves.getLast().getCol();
+        int pRow = getLast().getRow();
+        int pCol = getLast().getCol();
         Position king=new Position(-1,-1);
         if (board[pRow+1][pCol].getType().equals("King")) {
             king.setPosition(pRow+1,pCol);
@@ -194,6 +198,8 @@ if ((rowStep != 0 && colStep == 0) || (rowStep == 0 && colStep != 0)) {
 }
         return true;
     }
+
+
 
     public void createBoard(Piece[][] board) {
 
