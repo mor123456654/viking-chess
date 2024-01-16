@@ -25,8 +25,8 @@ public class GameLogic implements PlayableLogic{
             prevPiece.add((ConcretePiece) getPieceAtPosition(a));
             moves.add(b);
             movesprev.add(a);
-            board[b.getRow()][b.getCol()] = board[a.getRow()][a.getCol()];
-            board[a.getRow()][a.getCol()] = null;
+            board[b.getCol()][b.getRow()] = board[a.getCol()][a.getRow()];
+            board[a.getCol()][a.getRow()] = null;
             if(isGameFinished())
                 reset();
         //destinationPosition.isEating(destinationPosition);
@@ -38,7 +38,7 @@ public class GameLogic implements PlayableLogic{
 
     @Override
     public Piece getPieceAtPosition(Position position) {
-       return board[position.getRow()][position.getCol()];
+       return board[position.getCol()][position.getRow()];
     }
 
     @Override
@@ -84,14 +84,14 @@ public class GameLogic implements PlayableLogic{
     public void undoLastMove() {
         if (movesprev.size() >= 2) {
             Position lastMove = movesprev.get(movesprev.size() - 1);
-            int lastMoveRow = lastMove.getRow();
             int lastMoveCol = lastMove.getCol();
+            int lastMoveRow = lastMove.getRow();
             Position oldMove = moves.get(moves.size() - 1);
-            int oldMoveRow = oldMove.getRow();
             int oldMoveCol = oldMove.getCol();
+            int oldMoveRow = oldMove.getRow();
             ConcretePiece pieceAtLastMove = prevPiece.get(prevPiece.size()-1);
-            board[lastMoveRow][lastMoveCol] = pieceAtLastMove;
-            board[oldMoveRow][oldMoveCol] = null;
+            board[lastMoveCol][lastMoveRow] = pieceAtLastMove;
+            board[oldMoveCol][oldMoveRow] = null;
             movesprev.remove(movesprev.size() - 1);
             moves.remove(moves.size() - 1);
             prevPiece.remove(prevPiece.size() - 1);
@@ -111,63 +111,60 @@ public class GameLogic implements PlayableLogic{
 
     public boolean checkIfKingSurrounded() {
         int redAround = 0;
-        Position king = isKingNear();
-        int kRow = king.getRow();
-        int kCol = king.getCol();
+        Position kingPosition = isKingNear();
 
-        if (isSecondPlayerTurn() && kRow != -1 && kCol != -1) {
-            if (kRow + 1 < boardSize && board[kRow + 1][kCol] != null) {
-                if (!board[kRow + 1][kCol].getOwner().isPlayerOne()) {
-                    redAround++;
-                }
+        if (kingPosition.getCol() != -1 && kingPosition.getRow() != -1) {
+            int kCol = kingPosition.getCol();
+            int kRow = kingPosition.getRow();
+
+            if (isSecondPlayerTurn()) {
+                redAround +=  isSame(kCol + 1, kRow,secondPlayer);
+                redAround += isSame(kCol - 1, kRow,secondPlayer);
+                redAround += isSame(kCol, kRow + 1,secondPlayer);
+                redAround += isSame(kCol, kRow - 1,secondPlayer);
+                System.out.print(redAround);
+                return (kingPosition.isNearWall() && redAround == 3) || (redAround == 4);
             }
-            if (kRow - 1 >= 0 && board[kRow - 1][kCol] != null) {
-                if (!board[kRow - 1][kCol].getOwner().isPlayerOne()) {
-                    redAround++;
-                }
-            }
-            if (kCol + 1 < boardSize && board[kRow][kCol + 1] != null) {
-                if (!board[kRow][kCol + 1].getOwner().isPlayerOne()) {
-                    redAround++;
-                }
-            }
-            if (kCol - 1 >= 0 && board[kRow][kCol - 1] != null) {
-                if (!board[kRow][kCol - 1].getOwner().isPlayerOne()) {
-                    redAround++;
-                }
-            }
-            return (king.isNearWall() && redAround == 3) || (redAround == 4);
         }
 
         return false;
     }
 
+    private int isSame(int Row, int Col,Player owner) {
+        if (Col >= 0 && Col < boardSize && Row >= 0 && Row < boardSize &&
+                board[Row][Col] != null && board[Row][Col].getOwner().equals(owner)) {
+            return 1;
+        }
+        return 0;
+    }
+
+
     public Position isKingNear() {
-        int pRow = getLast().getRow();
         int pCol = getLast().getCol();
+        int pRow = getLast().getRow();
         Position king = new Position(-1, -1);
 
-        if (pRow + 1 < boardSize && board[pRow + 1][pCol] != null) {
-            if (board[pRow + 1][pCol].getType().equals("King")) {
-                king.setPosition(pRow + 1, pCol);
+        if (pCol + 1 < boardSize && board[pCol + 1][pRow] != null) {
+            if (board[pCol + 1][pRow].getType().equals("King")) {
+                king.setPosition(pCol + 1, pRow);
                 return king;
             }
         }
-        if (pRow - 1 >= 0 && board[pRow - 1][pCol] != null) {
-            if (board[pRow - 1][pCol].getType().equals("King")) {
-                king.setPosition(pRow - 1, pCol);
+        if (pCol - 1 >= 0 && board[pCol - 1][pRow] != null) {
+            if (board[pCol - 1][pRow].getType().equals("King")) {
+                king.setPosition(pCol - 1, pRow);
                 return king;
             }
         }
-        if (pCol + 1 < boardSize && board[pRow][pCol + 1] != null) {
-            if (board[pRow][pCol + 1].getType().equals("King")) {
-                king.setPosition(pRow, pCol + 1);
+        if (pRow + 1 < boardSize && board[pCol][pRow + 1] != null) {
+            if (board[pCol][pRow + 1].getType().equals("King")) {
+                king.setPosition(pCol, pRow + 1);
                 return king;
             }
         }
-        if (pCol - 1 >= 0 && board[pRow][pCol - 1] != null) {
-            if (board[pRow][pCol - 1].getType().equals("King")) {
-                king.setPosition(pRow, pCol - 1);
+        if (pRow - 1 >= 0 && board[pCol][pRow - 1] != null) {
+            if (board[pCol][pRow - 1].getType().equals("King")) {
+                king.setPosition(pCol, pRow - 1);
                 return king;
             }
         }
@@ -177,13 +174,13 @@ public class GameLogic implements PlayableLogic{
 
     public boolean isValid(Position startingPosition, Position destinationPosition) {
         
-        int startRow = startingPosition.getRow();
         int startCol = startingPosition.getCol();
-        int endRow = destinationPosition.getRow();
+        int startRow = startingPosition.getRow();
         int endCol = destinationPosition.getCol();
+        int endRow = destinationPosition.getRow();
 
-        int rowStep;
-        int colStep;
+        int ColStep;
+        int RowStep;
 
         Piece currentPiece = getPieceAtPosition(startingPosition);
         // case the current piece isn't exist
@@ -202,37 +199,37 @@ public class GameLogic implements PlayableLogic{
         }
 
         // case the new position is not in the board limits
-        if (endRow < 0 || endRow >= boardSize || endCol < 0 || endCol >= boardSize) {
+        if (endCol < 0 || endCol >= boardSize || endRow < 0 || endRow >= boardSize) {
             return false;
         }
 
         // case it's not in a straight line
-        if (!(startRow == endRow || startCol == endCol)) {
+        if (!(startCol == endCol || startRow == endRow)) {
             return false;
         }
 
-        if (endRow > startRow) {
-            rowStep = 1;
-        } else if (endRow < startRow) {
-            rowStep = -1;
+        if (endCol > startCol) {
+            ColStep = 1;
+        } else if (endCol < startCol) {
+            ColStep = -1;
         } else {
-            rowStep = 0;
+            ColStep = 0;
         }
 
-        if (endCol > startCol) {
-            colStep = 1;
-        } else if (endCol < startCol) {
-            colStep = -1;
+        if (endRow > startRow) {
+            RowStep = 1;
+        } else if (endRow < startRow) {
+            RowStep = -1;
         } else {
-            colStep = 0;
+            RowStep = 0;
         }
 
         // Check for horizontal or vertical movement
-        if ((rowStep != 0 && colStep == 0) || (rowStep == 0 && colStep != 0)) {
-            for (int i = 1; i <= Math.max(Math.abs(endRow - startRow), Math.abs(endCol - startCol)); i++) {
-                int currentRow = startRow + i * rowStep;
-                int currentCol = startCol + i * colStep;
-                if (board[currentRow][currentCol] != null) {
+        if ((ColStep != 0 && RowStep == 0) || (ColStep == 0 && RowStep != 0)) {
+            for (int i = 1; i <= Math.max(Math.abs(endCol - startCol), Math.abs(endRow - startRow)); i++) {
+                int currentCol = startCol + i * ColStep;
+                int currentRow = startRow + i * RowStep;
+                if (board[currentCol][currentRow] != null) {
                     return false; // Path is not clear
                 }
             }
