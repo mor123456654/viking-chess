@@ -92,7 +92,7 @@ public class GameLogic implements PlayableLogic{
             Position oldMove = moves.get(moves.size() - 1);
             int oldMoveRow = oldMove.getRow();
             int oldMoveCol = oldMove.getCol();
-            ConcretePiece pieceAtLastMove = prevPiece.getLast();
+            ConcretePiece pieceAtLastMove = prevPiece.get(prevPiece.size()-1);
             board[lastMoveRow][lastMoveCol] = pieceAtLastMove;
             board[oldMoveRow][oldMoveCol] = null;
             movesprev.remove(movesprev.size() - 1);
