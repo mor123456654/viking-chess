@@ -3,12 +3,12 @@ public class Position {
     private int row;
     private int col;
 
-    Position(int row,int col){
+    Position(int col,int row){
         this.row= row;
         this.col= col;
     }
 
-    public void setPosition(int row, int col){
+    public void setPosition(int col, int row){
             this.row=row;
             this.col=col;
     }

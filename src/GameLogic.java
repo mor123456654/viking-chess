@@ -29,7 +29,7 @@ public class GameLogic implements PlayableLogic{
             board[a.getCol()][a.getRow()] = null;
             if(isGameFinished())
                 reset();
-        //destinationPosition.isEating(destinationPosition);
+        isEating(b);
             return true;
         }
         
@@ -142,37 +142,103 @@ public class GameLogic implements PlayableLogic{
 
 
     public Position isKingNear() {
-        int pCol = getLast().getCol();
-        int pRow = getLast().getRow();
         Position king = new Position(-1, -1);
+        if (getLast() != null) {
+            int pCol = getLast().getCol();
+            int pRow = getLast().getRow();
 
-        if (pCol + 1 < boardSize && board[pCol + 1][pRow] != null) {
-            if (board[pCol + 1][pRow].getType().equals("♚")) {
-                king.setPosition(pCol + 1, pRow);
-                return king;
-            }
-        }
-        if (pCol - 1 >= 0 && board[pCol - 1][pRow] != null) {
-            if (board[pCol - 1][pRow].getType().equals("♚")) {
-                king.setPosition(pCol - 1, pRow);
-                return king;
-            }
-        }
-        if (pRow + 1 < boardSize && board[pCol][pRow + 1] != null) {
-            if (board[pCol][pRow + 1].getType().equals("♚")) {
-                king.setPosition(pCol, pRow + 1);
-                return king;
-            }
-        }
-        if (pRow - 1 >= 0 && board[pCol][pRow - 1] != null) {
-            if (board[pCol][pRow - 1].getType().equals("♚")) {
-                king.setPosition(pCol, pRow - 1);
-                return king;
-            }
-        }
 
+            if (pCol + 1 < boardSize && board[pCol + 1][pRow] != null) {
+                if (board[pCol + 1][pRow].getType().equals("♚")) {
+                    king.setPosition(pCol + 1, pRow);
+                    return king;
+                }
+            }
+            if (pCol - 1 >= 0 && board[pCol - 1][pRow] != null) {
+                if (board[pCol - 1][pRow].getType().equals("♚")) {
+                    king.setPosition(pCol - 1, pRow);
+                    return king;
+                }
+            }
+            if (pRow + 1 < boardSize && board[pCol][pRow + 1] != null) {
+                if (board[pCol][pRow + 1].getType().equals("♚")) {
+                    king.setPosition(pCol, pRow + 1);
+                    return king;
+                }
+            }
+            if (pRow - 1 >= 0 && board[pCol][pRow - 1] != null) {
+                if (board[pCol][pRow - 1].getType().equals("♚")) {
+                    king.setPosition(pCol, pRow - 1);
+                    return king;
+                }
+            }
+        }
         return king;
     }
+    public void isEating(Position pos) {
+        int pCol = pos.getCol();
+        int pRow = pos.getRow();
+        List<Position> position = isEnemyNear(getPieceAtPosition(pos));
+        Position kingPosition = isKingNear();
+        while (!position.isEmpty()) {
+                int kCol = position.get(position.size() - 1).getCol();
+                int kRow = position.get(position.size() - 1).getRow();
+                if (isSameB(kCol + 1, kRow, getPieceAtPosition(pos).getOwner())&&
+                        isSameB(kCol -1, kRow, getPieceAtPosition(pos).getOwner())){
+                    board[kCol][kRow] = null;
+                }
+                if (isSameB(kCol , kRow+1, getPieceAtPosition(pos).getOwner())&&
+                        isSameB(kCol , kRow-1, getPieceAtPosition(pos).getOwner())){
+                    board[kCol][kRow] = null;
+                }
+                if(position.get(position.size() - 1).isNearWall()) {
+                    // Check if the enemy piece is on the other side of the wall
+                    if ((10 == kCol && 9 == pCol) || (0 == kCol && 1 == pCol) || (10 == kRow && 9 == pRow) || (0 == kRow && 1 == pRow)) {
+                        board[kCol][kRow] = null;
+                    }
+                }
+            position.remove(position.size() - 1);
+        }
+    }
+    private boolean isSameB(int Col, int Row,Player owner) {
+        if (Col >= 0 && Col < boardSize && Row >= 0 && Row < boardSize &&
+                board[Col][Row] != null && board[Col][Row].getOwner().equals(owner)) {
+            return true;
+        }
+        return false;
+    }
+    public List<Position> isEnemyNear(Piece me) {
+        List<Position> enemy = new ArrayList<>();
+        if (getLast() != null) {
+            int pCol = getLast().getCol();
+            int pRow = getLast().getRow();
+
+
+            if (pCol + 1 < boardSize && board[pCol + 1][pRow] != null && getPieceAtPosition(new Position(pCol + 1, pRow)) != null) {
+                if (!me.getOwner().equals(board[pCol + 1][pRow].getOwner()) && !board[pCol + 1][pRow].getType().equals("♚")) {
+                    enemy.add(new Position(pCol + 1, pRow));
+                }
+            }
+            if (pCol - 1 >= 0 && board[pCol - 1][pRow] != null && getPieceAtPosition(new Position(pCol - 1, pRow)) != null) {
+                if (!me.getOwner().equals(board[pCol - 1][pRow].getOwner()) && !board[pCol - 1][pRow].getType().equals("♚")) {
+                    enemy.add(new Position(pCol - 1, pRow));
+                }
+            }
+            if (pRow + 1 < boardSize && board[pCol][pRow + 1] != null && getPieceAtPosition(new Position(pCol, pRow + 1)) != null) {
+                if (!me.getOwner().equals(board[pCol][pRow + 1].getOwner()) && !board[pCol][pRow + 1].getType().equals("♚")) {
+                    enemy.add(new Position(pCol, pRow + 1));
+                }
+            }
+            if (pRow - 1 >= 0 && board[pCol][pRow - 1] != null && getPieceAtPosition(new Position(pCol, pRow - 1)) != null) {
+                if (!me.getOwner().equals(board[pCol][pRow - 1].getOwner()) && !board[pCol][pRow - 1].getType().equals("♚")) {
+                    enemy.add(new Position(pCol, pRow - 1));
+                }
+            }
+        }
+            return enemy;
+
+    }
+
 
     public boolean isValid(Position startingPosition, Position destinationPosition) {
         
