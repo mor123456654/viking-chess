@@ -54,16 +54,17 @@ public class GameLogic implements PlayableLogic{
     @Override
     public boolean isGameFinished() {
         // check of last move was king & corner
-        // להוסיף מלך
-        Piece currentPiece = getPieceAtPosition(getLast());
-        if (getLast().isCorner() && currentPiece.getType().equals("♚")) {
-            firstPlayer.addWin();
-            return true;
+        if (getLast()!=null) {
+            Piece currentPiece = getPieceAtPosition(getLast());
+            if (getLast().isCorner() && currentPiece.getType().equals("♚")) {
+                firstPlayer.addWin();
+                return true;
+            }
+            if (checkIfKingSurrounded()) {
+                secondPlayer.addWin();
+                return true;
+            }
         }
-         if(checkIfKingSurrounded()) {
-             secondPlayer.addWin();
-             return true;
-         }
             return false;
     }
 
@@ -106,7 +107,9 @@ public class GameLogic implements PlayableLogic{
     }
 
     public Position getLast() {
+        if(moves.size()>0)
         return moves.get(moves.size() - 1);
+        return null;
      }
 
     public boolean checkIfKingSurrounded() {
@@ -117,7 +120,6 @@ public class GameLogic implements PlayableLogic{
             int kCol = kingPosition.getCol();
             int kRow = kingPosition.getRow();
 
-            if (isSecondPlayerTurn()) {
                 redAround +=  isSame(kCol + 1, kRow,secondPlayer);
                 redAround += isSame(kCol - 1, kRow,secondPlayer);
                 redAround += isSame(kCol, kRow + 1,secondPlayer);
@@ -125,7 +127,7 @@ public class GameLogic implements PlayableLogic{
                 System.out.print(redAround);
                 return (kingPosition.isNearWall() && redAround == 3) || (redAround == 4);
             }
-        }
+
 
         return false;
     }
