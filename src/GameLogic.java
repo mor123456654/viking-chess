@@ -202,7 +202,7 @@ public class GameLogic implements PlayableLogic{
     }
     private boolean isSameB(int Col, int Row,Player owner) {
         if (Col >= 0 && Col < boardSize && Row >= 0 && Row < boardSize &&
-                board[Col][Row] != null && board[Col][Row].getOwner().equals(owner)) {
+                board[Col][Row] != null && board[Col][Row].getOwner().equals(owner)&& !board[Col][Row].getType().equals("♚")) {
             return true;
         }
         return false;
