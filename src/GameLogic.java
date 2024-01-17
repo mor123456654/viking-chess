@@ -12,7 +12,6 @@ public class GameLogic implements PlayableLogic{
     private ConcretePlayer secondPlayer = new ConcretePlayer(2,0);;
 
     List<Position> moves = new ArrayList<Position>();
-    List<Position> movesprev = new ArrayList<Position>();
     List<ConcretePiece> prevPiece = new ArrayList<ConcretePiece>();
 
     GameLogic() {
@@ -22,9 +21,10 @@ public class GameLogic implements PlayableLogic{
     @Override
     public boolean move(Position a, Position b) {
         if(isValid(a,b)) {
+            ConcretePiece p=(ConcretePiece) getPieceAtPosition(a);
+            p.addPosition(a);
             prevPiece.add((ConcretePiece) getPieceAtPosition(a));
             moves.add(b);
-            movesprev.add(a);
             board[b.getCol()][b.getRow()] = board[a.getCol()][a.getRow()];
             board[a.getCol()][a.getRow()] = null;
             if(isGameFinished())
@@ -83,23 +83,26 @@ public class GameLogic implements PlayableLogic{
 
     @Override
     public void undoLastMove() {
-        if (movesprev.size() >= 2) {
-            Position lastMove = movesprev.get(movesprev.size() - 1);
-            int lastMoveCol = lastMove.getCol();
-            int lastMoveRow = lastMove.getRow();
+        if (moves.size() >= 2) {
+            ConcretePiece lastMoveP = prevPiece.get(prevPiece.size() - 1);
+            int lastMoveCol = lastMoveP.GetPosition().get(lastMoveP.GetPosition().size()-1).getCol();
+            int lastMoveRow = lastMoveP.GetPosition().get(lastMoveP.GetPosition().size()-1).getRow();
+
             Position oldMove = moves.get(moves.size() - 1);
             int oldMoveCol = oldMove.getCol();
             int oldMoveRow = oldMove.getRow();
-            ConcretePiece pieceAtLastMove = prevPiece.get(prevPiece.size()-1);
-            board[lastMoveCol][lastMoveRow] = pieceAtLastMove;
+
+            board[lastMoveCol][lastMoveRow] = lastMoveP;
             board[oldMoveCol][oldMoveRow] = null;
-            movesprev.remove(movesprev.size() - 1);
+            lastMoveP.GetPosition();
             moves.remove(moves.size() - 1);
+            lastMoveP.GetPosition().remove(lastMoveP.GetPosition().size()-1);
             prevPiece.remove(prevPiece.size() - 1);
-        } else if (movesprev.size() == 1) {
+        } else if (moves.size() == 1) {
             reset();
         }
     }
+
 
     @Override
     public int getBoardSize() {
