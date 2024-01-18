@@ -32,7 +32,7 @@ public class Position {
         return row - 1 == -1 || col - 1 == -1 || row + 1 == 11 || col + 1 == 11;
     }
     public boolean isNearCorner() {
-        return (row == 0 && col - 1 == 0) ||(row-1==0&&col==0)||(row==10&&col+1==0)||(row+1==10&&col==10);
+        return (row == 10 && col == 9) ||(row==10&&col==1)||(row==9&&col==10)||(row==0&&col==1)||(row==0&&col==9)||(row==9&&col==0)||(row==1&&col==0);
     }
     public void isEating(){
 
