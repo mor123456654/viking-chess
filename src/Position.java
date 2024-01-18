@@ -33,6 +33,7 @@ public class Position {
     }
     public boolean isNearCorner() {
         return (row == 10 && col == 9) ||(row==10&&col==1)||(row==9&&col==10)||(row==0&&col==1)||(row==0&&col==9)||(row==9&&col==0)||(row==1&&col==0);
+
     }
     public void isEating(){
 
