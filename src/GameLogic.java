@@ -200,7 +200,7 @@ public class GameLogic implements PlayableLogic{
         List<Position> position = isEnemyNear(getPieceAtPosition(pos));
         Position kingPosition = isKingNear();
         ConcretePiece eating=(ConcretePiece) getPieceAtPosition(pos);
-        if (!getPieceAtPosition(pos).getType().equals("♚")) {
+        if (getPieceAtPosition(pos)!=null&&!getPieceAtPosition(pos).getType().equals("♚")) {
             while (!position.isEmpty()) {
                 int kCol = position.get(position.size() - 1).getCol();
                 int kRow = position.get(position.size() - 1).getRow();
