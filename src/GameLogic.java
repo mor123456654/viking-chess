@@ -198,8 +198,6 @@ public class GameLogic implements PlayableLogic{
         int pCol = pos.getCol();
         int pRow = pos.getRow();
         List<Position> position = isEnemyNear(getPieceAtPosition(pos));
-        Position kingPosition = isKingNear();
-        ConcretePiece eating=(ConcretePiece) getPieceAtPosition(pos);
         if (getPieceAtPosition(pos)!=null&&!getPieceAtPosition(pos).getType().equals("♚")) {
             while (!position.isEmpty()) {
                 int kCol = position.get(position.size() - 1).getCol();
@@ -231,8 +229,17 @@ public class GameLogic implements PlayableLogic{
                         eatmoves.add(new Position(kCol, kRow));
                     }
                 }
-                position.remove(position.size() - 1);
+                if (position.get(position.size() - 1).isNearCorner()){
+                    if ((9 == kCol && 8 == pCol) || (1 == kCol && 2 == pCol) || (9 == kRow && 8 == pRow) || (1 == kRow && 2 == pRow)) {
+                    board[kCol][kRow] = null;
+                    if (eaten.GetPosition() != null && eaten.GetPosition().equals(new Position(kCol, kRow)))
+                        eaten.addPosition(new Position(kCol, kRow));
+                    eatPiece.add(eaten);
+                    eatmoves.add(new Position(kCol, kRow));
+                }
             }
+                position.remove(position.size() - 1);
+                }
         }
     }
     private boolean isSameB(int Col, int Row,Player owner) {
