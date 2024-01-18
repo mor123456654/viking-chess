@@ -200,37 +200,39 @@ public class GameLogic implements PlayableLogic{
         List<Position> position = isEnemyNear(getPieceAtPosition(pos));
         Position kingPosition = isKingNear();
         ConcretePiece eating=(ConcretePiece) getPieceAtPosition(pos);
-        while (!position.isEmpty()) {
+        if (!getPieceAtPosition(pos).getType().equals("♚")) {
+            while (!position.isEmpty()) {
                 int kCol = position.get(position.size() - 1).getCol();
                 int kRow = position.get(position.size() - 1).getRow();
-            ConcretePiece eaten=(ConcretePiece) getPieceAtPosition(new Position(kCol,kRow));
-                if (isSameB(kCol + 1, kRow, getPieceAtPosition(pos).getOwner())&&
-                        isSameB(kCol -1, kRow, getPieceAtPosition(pos).getOwner())){
+                ConcretePiece eaten = (ConcretePiece) getPieceAtPosition(new Position(kCol, kRow));
+                if (isSameB(kCol + 1, kRow, getPieceAtPosition(pos).getOwner()) &&
+                        isSameB(kCol - 1, kRow, getPieceAtPosition(pos).getOwner())) {
                     board[kCol][kRow] = null;
-                    if (eaten.GetPosition()!=null && eaten.GetPosition().equals(new Position(kCol,kRow)))
-                    eaten.addPosition(new Position(kCol,kRow));
+                    if (eaten.GetPosition() != null && eaten.GetPosition().equals(new Position(kCol, kRow)))
+                        eaten.addPosition(new Position(kCol, kRow));
                     eatPiece.add(eaten);
-                    eatmoves.add(new Position(kCol,kRow));
+                    eatmoves.add(new Position(kCol, kRow));
                 }
-                if (isSameB(kCol , kRow+1, getPieceAtPosition(pos).getOwner())&&
-                        isSameB(kCol , kRow-1, getPieceAtPosition(pos).getOwner())){
+                if (isSameB(kCol, kRow + 1, getPieceAtPosition(pos).getOwner()) &&
+                        isSameB(kCol, kRow - 1, getPieceAtPosition(pos).getOwner())) {
                     board[kCol][kRow] = null;
-                    if (eaten.GetPosition()!=null && eaten.GetPosition().equals(new Position(kCol,kRow)))
-                    eaten.addPosition(new Position(kCol,kRow));
+                    if (eaten.GetPosition() != null && eaten.GetPosition().equals(new Position(kCol, kRow)))
+                        eaten.addPosition(new Position(kCol, kRow));
                     eatPiece.add(eaten);
-                    eatmoves.add(new Position(kCol,kRow));
+                    eatmoves.add(new Position(kCol, kRow));
                 }
-                if(position.get(position.size() - 1).isNearWall()) {
+                if (position.get(position.size() - 1).isNearWall()) {
                     // Check if the enemy piece is on the other side of the wall
                     if ((10 == kCol && 9 == pCol) || (0 == kCol && 1 == pCol) || (10 == kRow && 9 == pRow) || (0 == kRow && 1 == pRow)) {
                         board[kCol][kRow] = null;
-                        if (eaten.GetPosition()!=null && eaten.GetPosition().equals(new Position(kCol,kRow)))
-                        eaten.addPosition(new Position(kCol,kRow));
+                        if (eaten.GetPosition() != null && eaten.GetPosition().equals(new Position(kCol, kRow)))
+                            eaten.addPosition(new Position(kCol, kRow));
                         eatPiece.add(eaten);
-                        eatmoves.add(new Position(kCol,kRow));
+                        eatmoves.add(new Position(kCol, kRow));
                     }
                 }
-            position.remove(position.size() - 1);
+                position.remove(position.size() - 1);
+            }
         }
     }
     private boolean isSameB(int Col, int Row,Player owner) {
