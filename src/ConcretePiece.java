@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConcretePiece implements Piece {
-
     private String type;
     private Player owner;
     List<Position> position = new ArrayList<Position>();
@@ -10,13 +9,15 @@ public class ConcretePiece implements Piece {
     ConcretePiece(String type,Player owner){
         this.type = type;
         this.owner = owner;
-
     }
     ConcretePiece(String type,Player owner,Position pos){
         this.type = type;
         this.owner = owner;
         this.position.add(pos);
     }
+
+
+
     public void addPosition(Position position){
         this.position.add(position);
     }

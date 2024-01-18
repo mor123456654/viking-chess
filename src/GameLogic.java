@@ -12,8 +12,9 @@ public class GameLogic implements PlayableLogic{
     private ConcretePlayer secondPlayer = new ConcretePlayer(2,0);;
 
     List<Position> moves = new ArrayList<Position>();
+    List<Position> eatmoves = new ArrayList<Position>();
     List<ConcretePiece> prevPiece = new ArrayList<ConcretePiece>();
-
+    List<ConcretePiece> eatPiece = new ArrayList<ConcretePiece>();
     GameLogic() {
         createBoard(board);
     }
@@ -84,13 +85,26 @@ public class GameLogic implements PlayableLogic{
     @Override
     public void undoLastMove() {
         if (moves.size() >= 2) {
-            ConcretePiece lastMoveP = prevPiece.get(prevPiece.size() - 1);
-            int lastMoveCol = lastMoveP.GetPosition().get(lastMoveP.GetPosition().size()-1).getCol();
-            int lastMoveRow = lastMoveP.GetPosition().get(lastMoveP.GetPosition().size()-1).getRow();
-
             Position oldMove = moves.get(moves.size() - 1);
             int oldMoveCol = oldMove.getCol();
             int oldMoveRow = oldMove.getRow();
+            ConcretePiece lastMoveP = prevPiece.get(prevPiece.size() - 1);
+            int lastMoveCol = lastMoveP.GetPosition().get(lastMoveP.GetPosition().size()-1).getCol();
+            int lastMoveRow = lastMoveP.GetPosition().get(lastMoveP.GetPosition().size()-1).getRow();
+            while (!eatPiece.isEmpty() && !eatmoves.isEmpty()) {
+                ConcretePiece eaten = eatPiece.get(eatPiece.size() - 1);
+                Position eatMove = eatmoves.get(eatmoves.size() - 1);
+                int eatMoveCol = eatMove.getCol();
+                int eatMoveRow = eatMove.getRow();
+                if(isAdjacent(eatMoveCol,eatMoveRow,oldMoveCol,oldMoveRow)) {
+                    board[eatMoveCol][eatMoveRow] = eaten;
+
+                    eatPiece.remove(eatPiece.size() - 1);
+                    eatmoves.remove(eatmoves.size() - 1);
+                }
+                else break;
+            }
+
 
             board[lastMoveCol][lastMoveRow] = lastMoveP;
             board[oldMoveCol][oldMoveRow] = null;
@@ -102,7 +116,9 @@ public class GameLogic implements PlayableLogic{
             reset();
         }
     }
-
+    private boolean isAdjacent(int col1, int row1, int col2, int row2) {
+        return (Math.abs(col1 - col2) == 1 && Math.abs(row1 - row2) == 0)||(Math.abs(col1 - col2) == 0 && Math.abs(row1 - row2) == 1);
+    }
 
     @Override
     public int getBoardSize() {
@@ -183,21 +199,35 @@ public class GameLogic implements PlayableLogic{
         int pRow = pos.getRow();
         List<Position> position = isEnemyNear(getPieceAtPosition(pos));
         Position kingPosition = isKingNear();
+        ConcretePiece eating=(ConcretePiece) getPieceAtPosition(pos);
         while (!position.isEmpty()) {
                 int kCol = position.get(position.size() - 1).getCol();
                 int kRow = position.get(position.size() - 1).getRow();
+            ConcretePiece eaten=(ConcretePiece) getPieceAtPosition(new Position(kCol,kRow));
                 if (isSameB(kCol + 1, kRow, getPieceAtPosition(pos).getOwner())&&
                         isSameB(kCol -1, kRow, getPieceAtPosition(pos).getOwner())){
                     board[kCol][kRow] = null;
+                    if (eaten.GetPosition()!=null && eaten.GetPosition().equals(new Position(kCol,kRow)))
+                    eaten.addPosition(new Position(kCol,kRow));
+                    eatPiece.add(eaten);
+                    eatmoves.add(new Position(kCol,kRow));
                 }
                 if (isSameB(kCol , kRow+1, getPieceAtPosition(pos).getOwner())&&
                         isSameB(kCol , kRow-1, getPieceAtPosition(pos).getOwner())){
                     board[kCol][kRow] = null;
+                    if (eaten.GetPosition()!=null && eaten.GetPosition().equals(new Position(kCol,kRow)))
+                    eaten.addPosition(new Position(kCol,kRow));
+                    eatPiece.add(eaten);
+                    eatmoves.add(new Position(kCol,kRow));
                 }
                 if(position.get(position.size() - 1).isNearWall()) {
                     // Check if the enemy piece is on the other side of the wall
                     if ((10 == kCol && 9 == pCol) || (0 == kCol && 1 == pCol) || (10 == kRow && 9 == pRow) || (0 == kRow && 1 == pRow)) {
                         board[kCol][kRow] = null;
+                        if (eaten.GetPosition()!=null && eaten.GetPosition().equals(new Position(kCol,kRow)))
+                        eaten.addPosition(new Position(kCol,kRow));
+                        eatPiece.add(eaten);
+                        eatmoves.add(new Position(kCol,kRow));
                     }
                 }
             position.remove(position.size() - 1);
@@ -315,7 +345,7 @@ public class GameLogic implements PlayableLogic{
     public void createBoard(Piece[][] board) {
         // create secondPlayer players
         board[0][3] = new Pawn(secondPlayer, "A7");
-    
+
         board[0][4] = new Pawn( secondPlayer, "A9");
         board[0][5] = new Pawn(secondPlayer, "A11");
         board[0][6] = new Pawn(secondPlayer, "A15");
