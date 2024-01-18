@@ -326,7 +326,9 @@ public class GameLogic implements PlayableLogic{
         } else {
             RowStep = 0;
         }
-
+        // check is it corner
+        if (((endCol==0&&endRow==0)||(endCol==10&&endRow==0)||(endCol==0&&endRow==10)||(endCol==10&&endRow==10))&&getPieceAtPosition(startingPosition).getType().equals("♙"))
+            return false;
         // Check for horizontal or vertical movement
         if ((ColStep != 0 && RowStep == 0) || (ColStep == 0 && RowStep != 0)) {
             for (int i = 1; i <= Math.max(Math.abs(endCol - startCol), Math.abs(endRow - startRow)); i++) {
