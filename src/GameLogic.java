@@ -438,18 +438,22 @@ public class GameLogic implements PlayableLogic{
 
     public void getDefanceNames(String s){
         for (int i = 0; i < firstPiece.length - 1; i++) {
-            if (firstPiece[i].getId()!=7)
+            if (firstPiece[i].position.size() > 0) {
+                if (firstPiece[i].getId()!=6)
                 s="D"+firstPiece[i].getId();
-            else
+                else
                 s="K"+firstPiece[i].getId();
-            firstPiece[i].printMoves(s);
+                firstPiece[i].printMoves(s);
+            }
         }
     }
 
     public void getAttackNames(String s) {
         for (int i = 0; i < secondPiece.length - 1; i++) {
-            s = "A" + secondPiece[i].getId();
-            secondPiece[i].printMoves(s);
+            if (secondPiece[i].position.size() > 0) {
+                s = "A" + secondPiece[i].getId();
+                secondPiece[i].printMoves(s);
+            }
         }
     }
 
