@@ -1,13 +1,13 @@
 public class Pawn extends ConcretePiece {
 
-    private String playerName;
+    private int playerName;
 
-    Pawn(ConcretePlayer owner, String playerName) {
-        super("♙" ,owner);
+    Pawn(ConcretePlayer owner, int playerName) {
+        super("♙" ,owner,playerName);
         this.playerName = playerName;
     }
 
-    public String getPlayerName(){
+    public int getPlayerName(){
         return playerName;
     }
 

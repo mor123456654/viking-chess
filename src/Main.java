@@ -16,6 +16,6 @@ public class Main {
             UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
             UIManager.put("Button.select", new ColorUIResource(new Color(0, 0, 0, 0)));
             gui.start();
-        });
+        }); 
     }
 }

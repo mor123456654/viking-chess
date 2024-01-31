@@ -2,7 +2,7 @@ public class Position {
 
     private int row;
     private int col;
-
+    Piece piece=null;
     Position(int col,int row){
         this.row= row;
         this.col= col;
@@ -12,7 +12,12 @@ public class Position {
             this.row=row;
             this.col=col;
     }
-
+    public void setPiece(Piece piece,int col, int row){
+        this.piece=piece;
+        ConcretePiece piece1 = (ConcretePiece) this.piece;
+        piece1.addPosition(new Position(col,row));
+    }
+    public void setPiece(Piece piece){this.piece=piece;}
     public int getRow() {
         return row;
     }
@@ -34,6 +39,7 @@ public class Position {
         return (row == 10 && col == 9) ||(row==10&&col==1)||(row==9&&col==10)||(row==0&&col==1)||(row==0&&col==9)||(row==9&&col==0)||(row==1&&col==0)||(row==1&&col==10);
     }
     public void isEating(){
+
     }
 
 

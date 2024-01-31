@@ -4,11 +4,14 @@ import java.util.List;
 public class ConcretePiece implements Piece {
     private String type;
     private Player owner;
+    private int id;
     List<Position> position = new ArrayList<Position>();
-
-    ConcretePiece(String type,Player owner){
+    ConcretePiece(){
+    }
+    ConcretePiece(String type,Player owner,int id){
         this.type = type;
         this.owner = owner;
+        this.id=id;
     }
     ConcretePiece(String type,Player owner,Position pos){
         this.type = type;
@@ -34,7 +37,17 @@ public class ConcretePiece implements Piece {
     public String getType() {
         return type;
     }
-
+    public void printMoves(String s){
+        System.out.print(s+this.type+":");
+        System.out.print("[");
+        for(int i=0;i<position.size();i++){
+            System.out.print(","+position.get(i));
+        }
+        System.out.print("]");
+    }
+    public int getId() {
+        return id;
+    }
     public void setOwner(Player owner) {
         this.owner = owner;
     }
