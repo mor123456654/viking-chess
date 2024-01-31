@@ -46,8 +46,7 @@ public class ConcretePiece implements Piece {
                 System.out.print(", ");
             }
         }
-        System.out.print("]");
-        System.out.println("\n");
+        System.out.println("]");
     }
     public int getId() {
         return id;
@@ -68,6 +67,6 @@ public class ConcretePiece implements Piece {
             position.remove(position.size() - 1);
         }
     }
-   
+
 
 }

@@ -41,7 +41,7 @@ public class GameLogic implements PlayableLogic{
         isEating(b);
             return true;
         }
-        
+
         return false;
     }
 
@@ -365,7 +365,7 @@ public class GameLogic implements PlayableLogic{
 
     public void createBoard(Piece[][] board) {
         for (int i=0;i<24;i++){
-            secondPiece[i]=new Pawn(secondPlayer, i+1);
+            secondPiece[i]=new Pawn(secondPlayer, (i+1));
         }
         // create secondPlayer players
         board[0][3] = secondPiece[6];
@@ -406,9 +406,9 @@ public class GameLogic implements PlayableLogic{
         // create firstPlayer players
         for (int i=0;i<13;i++){
             if(i!=6)
-            firstPiece[i]=new Pawn(firstPlayer, i+1);
+                firstPiece[i]=new Pawn(firstPlayer, (i+1));
             else
-                firstPiece[i]=new King(firstPlayer, i);
+                firstPiece[i]=new King(firstPlayer, (i+1));
         }
         board[5][3] = firstPiece[0];
         board[4][4] = firstPiece[1];
