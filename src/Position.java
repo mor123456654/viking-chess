@@ -1,13 +1,23 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Position {
 
     private int row;
     private int col;
     Piece piece=null;
+    List<ConcretePiece> difPiece= new ArrayList<ConcretePiece>();
     Position(int col,int row){
         this.row= row;
         this.col= col;
     }
-
+public void addPiece(ConcretePiece p){
+        if(!difPiece.contains(p))
+            difPiece.add(p);
+}
+public List<ConcretePiece> getDifPiece(){
+        return this.difPiece;
+}
     public void setPosition(int col, int row){
             this.row=row;
             this.col=col;
@@ -41,6 +51,8 @@ public class Position {
     public void isEating(){
 
     }
-
+    public void printMoves(){
+            System.out.println("(" + getCol() + ", " + getRow() + ")"+difPiece.size()+" pieces");
+    }
 
 }

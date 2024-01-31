@@ -25,13 +25,14 @@ public class GameLogic implements PlayableLogic{
         if(isValid(a,b)) {
             ConcretePiece p=(ConcretePiece) getPieceAtPosition(a);
             if(p.getOwner().isPlayerOne()){
-                firstPiece[p.getId()-1].addPosition(a);
+                firstPiece[p.getId()-1].addPosition(b);
             }
             else {
-                secondPiece[p.getId() - 1].addPosition(a);
+                secondPiece[p.getId() - 1].addPosition(b);
             }
             prevPiece.add((ConcretePiece) getPieceAtPosition(a));
             moves.add(b);
+            b.addPiece((ConcretePiece)getPieceAtPosition(b));
             board[b.getCol()][b.getRow()] = board[a.getCol()][a.getRow()];
             board[a.getCol()][a.getRow()] = null;
             if(isGameFinished()) {
@@ -91,7 +92,7 @@ public class GameLogic implements PlayableLogic{
         createBoard(board);
 
     }
-
+//נועה לא לגעת
     @Override
     public void undoLastMove() {
         if (moves.size() >= 2) {
@@ -108,14 +109,11 @@ public class GameLogic implements PlayableLogic{
                 int eatMoveRow = eatMove.getRow();
                 if(isAdjacent(eatMoveCol,eatMoveRow,oldMoveCol,oldMoveRow)) {
                     board[eatMoveCol][eatMoveRow] = eaten;
-
                     eatPiece.remove(eatPiece.size() - 1);
                     eatmoves.remove(eatmoves.size() - 1);
                 }
                 else break;
             }
-
-
             board[lastMoveCol][lastMoveRow] = lastMoveP;
             board[oldMoveCol][oldMoveRow] = null;
             lastMoveP.GetPosition();
@@ -153,7 +151,6 @@ public class GameLogic implements PlayableLogic{
                 redAround += isSame(kCol - 1, kRow,secondPlayer);
                 redAround += isSame(kCol, kRow + 1,secondPlayer);
                 redAround += isSame(kCol, kRow - 1,secondPlayer);
-                System.out.print(redAround);
                 return (kingPosition.isNearWall() && redAround == 3) || (redAround == 4);
             }
 
@@ -460,11 +457,12 @@ public class GameLogic implements PlayableLogic{
 
 
     public void printStatistic() {
-        ComperatorBySteps comparator = new ComperatorBySteps();
+        ComperatorBySteps comparator1 = new ComperatorBySteps();
+        ComperatorByStepedSquare comparator4 = new ComperatorByStepedSquare();
         // Sorting firstPiece array
         for (int i = 0; i < firstPiece.length; i++) {
             for (int j = 0; j < firstPiece.length - i - 1; j++) {
-                if (comparator.compare(firstPiece[j], firstPiece[j + 1]) > 0) {
+                if (comparator1.compare(firstPiece[j], firstPiece[j + 1]) > 0) {
                     ConcretePiece temp = firstPiece[j];
                     firstPiece[j] = firstPiece[j + 1];
                     firstPiece[j + 1] = temp;
@@ -475,7 +473,7 @@ public class GameLogic implements PlayableLogic{
         // Sorting secondPiece array
         for (int i = 0; i < secondPiece.length; i++) {
             for (int j = 0; j < secondPiece.length - i - 1; j++) {
-                if (comparator.compare(secondPiece[j], secondPiece[j + 1]) > 0) {
+                if (comparator1.compare(secondPiece[j], secondPiece[j + 1]) > 0) {
                     ConcretePiece temp = secondPiece[j];
                     secondPiece[j] = secondPiece[j + 1];
                     secondPiece[j + 1] = temp;
@@ -495,8 +493,23 @@ public class GameLogic implements PlayableLogic{
             // Printing firstPiece array
             getDefanceNames(s);
         }
-
         printStars();
+        //נועה שימי לב זה סעיף 4 תהיי עירנית וחדה על המטרה
+       // ..המון הצלחה במילואים
+        Position[] pos= new Position[boardSize*boardSize];
+        for (int i=0;i<boardSize;i++){
+            for (int j=0;j<boardSize;j++){
+                for (int m = 0; i < firstPiece.length-i-1; i++) {
+                    for (int n = 0; j < firstPiece.length - j - 1; j++) {
+                        if (comparator4.compare(board[i][j],(board[i+1][j]) > 0) {
+                            ConcretePiece temp = firstPiece[j];
+                            firstPiece[j] = firstPiece[j + 1];
+                            firstPiece[j + 1] = temp;
+                        }
+                    }
+
+            }
+        }
     }
 
 }
