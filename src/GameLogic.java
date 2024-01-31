@@ -429,6 +429,30 @@ public class GameLogic implements PlayableLogic{
 
     }
 
+    public void printStars() {
+        for (int i = 0; i < 75; i++) {
+            System.out.print("*");
+        }
+        System.out.print("\n");
+    }
+
+    public void getDefanceNames(String s){
+        for (int i = 0; i < firstPiece.length - 1; i++) {
+            if (firstPiece[i].getId()!=7)
+                s="D"+firstPiece[i].getId();
+            else
+                s="K"+firstPiece[i].getId();
+            firstPiece[i].printMoves(s);
+        }
+    }
+
+    public void getAttackNames(String s) {
+        for (int i = 0; i < secondPiece.length - 1; i++) {
+            s = "A" + secondPiece[i].getId();
+            secondPiece[i].printMoves(s);
+        }
+    }
+
     public void printStatistic() {
         ComperatorBySteps comparator = new ComperatorBySteps();
         // Sorting firstPiece array
@@ -452,40 +476,22 @@ public class GameLogic implements PlayableLogic{
                 }
             }
         }
+
         String s="";
         if (won.isPlayerOne()) {
             // Printing firstPiece array
-            for (int i = 0; i < firstPiece.length - 1; i++) {
-                if (firstPiece[i].getId()!=7)
-                    s="D"+firstPiece[i].getId();
-                else
-                    s="K"+firstPiece[i].getId();
-                firstPiece[i].printMoves(s);
-            }
-
+            getDefanceNames(s);
             // Printing secondPiece array
-            for (int i = 0; i < secondPiece.length - 1; i++) {
-                s = "A" + secondPiece[i].getId();
-                secondPiece[i].printMoves(s);
-            }
-        }
-        else {
+            getAttackNames(s);
+        } else {
             // Printing secondPiece array
-            for (int i = 0; i < secondPiece.length - 1; i++) {
-                 s = "A" + secondPiece[i].getId();
-                secondPiece[i].printMoves(s);
-            }
-                // Printing firstPiece array
-                for (int i = 0; i < firstPiece.length - 1; i++) {
-                    if (firstPiece[i].getId()!=7)
-                        s="D"+firstPiece[i].getId();
-                    else
-                        s="K"+firstPiece[i].getId();
-                    firstPiece[i].printMoves(s);
-                }
-
-                }
-            }
-
+            getAttackNames(s);
+            // Printing firstPiece array
+            getDefanceNames(s);
         }
+
+        printStars();
+    }
+
+}
 

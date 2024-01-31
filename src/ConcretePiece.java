@@ -39,11 +39,12 @@ public class ConcretePiece implements Piece {
     }
     public void printMoves(String s){
         System.out.print(s+this.type+":");
-        System.out.print("[");
+        System.out.print("(");
         for(int i=0;i<position.size();i++){
-            System.out.print(","+position.get(i));
+            System.out.print(position.get(i).getCol()+","+position.get(i).getRow());
         }
-        System.out.print("]");
+        System.out.print(")");
+        System.out.println("\n");
     }
     public int getId() {
         return id;
