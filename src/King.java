@@ -2,11 +2,9 @@ import java.util.ArrayList;
 
 public class King extends ConcretePiece {
 
-    private int playerName;
 ArrayList <Position> moves=new ArrayList<>();
     King(ConcretePlayer owner, int playerName) {
         super("♚" ,owner,playerName);
-        this.playerName = playerName;
     }
 
     public boolean isWon(Position a) {
@@ -22,8 +20,5 @@ ArrayList <Position> moves=new ArrayList<>();
 //     System.out.print(")");
 //     System.out.println("\n");
 // }
-    public int getPlayerName(){
-        return playerName;
-    }
 
 }

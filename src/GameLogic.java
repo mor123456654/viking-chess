@@ -436,26 +436,28 @@ public class GameLogic implements PlayableLogic{
         System.out.print("\n");
     }
 
-    public void getDefanceNames(String s){
-        for (int i = 0; i < firstPiece.length - 1; i++) {
+    public void getDefanceNames(String s) {
+        for (int i = 0; i < firstPiece.length; i++) {
             if (firstPiece[i].position.size() > 0) {
-                if (firstPiece[i].getId()!=6)
-                s="D"+firstPiece[i].getId();
-                else
-                s="K"+firstPiece[i].getId();
+                if (firstPiece[i].getId() != 7) {
+                    s = "D" + firstPiece[i].getId();
+                } else {
+                    s = "K" + firstPiece[i].getId();
+                }
                 firstPiece[i].printMoves(s);
             }
         }
     }
 
     public void getAttackNames(String s) {
-        for (int i = 0; i < secondPiece.length - 1; i++) {
+        for (int i = 0; i < secondPiece.length ; i++) {
             if (secondPiece[i].position.size() > 0) {
                 s = "A" + secondPiece[i].getId();
                 secondPiece[i].printMoves(s);
             }
         }
     }
+
 
     public void printStatistic() {
         ComperatorBySteps comparator = new ComperatorBySteps();
