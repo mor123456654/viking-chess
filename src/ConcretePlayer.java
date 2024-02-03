@@ -2,12 +2,13 @@ public class ConcretePlayer implements Player{
 
     int wins;
     int player;
+    int kills;
 
-    ConcretePlayer(int player, int wins){
+    ConcretePlayer(int player, int wins, int kills){
         this.player = player;
         this.wins = wins;
+        this.kills = kills;
     }
-
 
     @Override
     public boolean isPlayerOne() {
@@ -18,6 +19,7 @@ public class ConcretePlayer implements Player{
         return false;
 
     }
+
     public void addWin() {
         this.wins ++;
     }
@@ -28,6 +30,14 @@ public class ConcretePlayer implements Player{
     }
 
     public void setWins(int winsNumber) {
-         this.wins = winsNumber;
+        this.wins = winsNumber;
+    }
+
+    public int getKills() {
+        return kills;
+    }
+
+    public void addKills(){
+        this.kills ++;
     }
 }
