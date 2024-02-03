@@ -43,7 +43,7 @@ public class ConcretePiece implements Piece {
     }
 
     public void printMoves(String s){
-        System.out.print(s+": ");
+        System.out.print( s + ": " );
         System.out.print("[");
         for(int i=0;i<position.size();i++){
             System.out.print("(" + position.get(i).getCol() + ", " + position.get(i).getRow() + ")");
@@ -79,8 +79,14 @@ public class ConcretePiece implements Piece {
         return kills;
     }
 
-    public void addKills(){
+    public void addKills() {
         this.kills ++;
+    }
+
+    public void printKills(String s) {
+        // if (this.kills > 0){
+            System.out.println( s + ": " + this.kills + " kills");
+        // }
     }
 
 }

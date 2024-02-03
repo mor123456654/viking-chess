@@ -39,7 +39,7 @@ public class GameLogic implements PlayableLogic{
                 printStatistic();
                 reset();
             }
-        isEating(b);
+            isEating(b);
             return true;
         }
 
@@ -218,8 +218,9 @@ public class GameLogic implements PlayableLogic{
                         eaten.addPosition(new Position(kCol, kRow));
                     eatPiece.add(eaten);
                     eatmoves.add(new Position(kCol, kRow));
-                    
-                    
+                    // add kills
+                    board[pos.getCol()][pos.getRow()].addKills();
+
                 }
 
                 if (isSameB(kCol, kRow + 1, getPieceAtPosition(pos).getOwner()) &&
@@ -229,6 +230,9 @@ public class GameLogic implements PlayableLogic{
                         eaten.addPosition(new Position(kCol, kRow));
                     eatPiece.add(eaten);
                     eatmoves.add(new Position(kCol, kRow));
+                    // add kills
+                    board[pos.getCol()][pos.getRow()].addKills();
+
                 }
 
                 if (position.get(position.size() - 1).isNearWall()) {
@@ -239,6 +243,9 @@ public class GameLogic implements PlayableLogic{
                             eaten.addPosition(new Position(kCol, kRow));
                         eatPiece.add(eaten);
                         eatmoves.add(new Position(kCol, kRow));
+                        // add kills
+                        board[pos.getCol()][pos.getRow()].addKills();
+
                     }
                 }
 
@@ -249,9 +256,12 @@ public class GameLogic implements PlayableLogic{
                             eaten.addPosition(new Position(kCol, kRow));
                         eatPiece.add(eaten);
                         eatmoves.add(new Position(kCol, kRow));
+                        // add kills
+                        board[pos.getCol()][pos.getRow()].addKills();
+
                     }
                 }
-
+                
                 position.remove(position.size() - 1);
             }
         }
@@ -442,7 +452,7 @@ public class GameLogic implements PlayableLogic{
         System.out.print("\n");
     }
 
-    public void getDefanceNames(String s) {
+    public void getDefanceNames(String s, int comp) {
         for (int i = 0; i < firstPiece.length; i++) {
             if (firstPiece[i].position.size() > 0) {
                 if (firstPiece[i].getId() != 7) {
@@ -450,16 +460,30 @@ public class GameLogic implements PlayableLogic{
                 } else {
                     s = "K" + firstPiece[i].getId();
                 }
-                firstPiece[i].printMoves(s);
+                if ( comp == 1 ){
+                    firstPiece[i].printMoves(s);
+                }
+                if ( comp == 2 ){
+                    if( firstPiece[i].getKills() > 0 ) {
+                        firstPiece[i].printKills(s);
+                    }
+                }
             }
         }
     }
 
-    public void getAttackNames(String s) {
+    public void getAttackNames(String s, int comp) {
         for (int i = 0; i < secondPiece.length ; i++) {
             if (secondPiece[i].position.size() > 0) {
                 s = "A" + secondPiece[i].getId();
-                secondPiece[i].printMoves(s);
+                if ( comp == 1 ) {
+                    secondPiece[i].printMoves(s);
+                }
+                if ( comp == 2 ) {
+                    if( secondPiece[i].getKills() > 0 ) {
+                        secondPiece[i].printKills(s);
+                    }
+                }
             }
         }
     }
@@ -467,6 +491,9 @@ public class GameLogic implements PlayableLogic{
 
     public void printStatistic() {
         ComperatorBySteps comparator1 = new ComperatorBySteps();
+        ComperatorByKills comparator2 = new ComperatorByKills();
+
+
         ComperatorByStepedSquare comparator4 = new ComperatorByStepedSquare();
         // Sorting firstPiece array
         for (int i = 0; i < firstPiece.length; i++) {
@@ -493,17 +520,51 @@ public class GameLogic implements PlayableLogic{
         String s="";
         if (won.isPlayerOne()) {
             // Printing firstPiece array
-            getDefanceNames(s);
+            getDefanceNames(s, 1);
             // Printing secondPiece array
-            getAttackNames(s);
+            getAttackNames(s, 1);
         } else {
             // Printing secondPiece array
-            getAttackNames(s);
+            getAttackNames(s, 1);
             // Printing firstPiece array
-            getDefanceNames(s);
+            getDefanceNames(s, 1);
         }
+
         printStars();
-        //להוסיף את סעיף 2
+
+        ConcretePiece[] sharedPieces = new ConcretePiece[firstPiece.length + secondPiece.length];
+ 
+        for (int i = 0; i < firstPiece.length; i++) {
+            sharedPieces[i] = firstPiece[i];
+        }
+
+        for (int i = 0; i < secondPiece.length; i++) {
+            sharedPieces[firstPiece.length + i] = secondPiece[i];
+        }
+
+        s="";
+        for (int i = 0; i < sharedPieces.length; i++) {
+            for (int j = 0; j < sharedPieces.length - i - 1; j++) {
+                if (comparator2.compare(sharedPieces[j], sharedPieces[j + 1]) > 0) {
+                    ConcretePiece temp = sharedPieces[j];
+                    sharedPieces[j] = sharedPieces[j + 1];
+                    sharedPieces[j + 1] = temp;
+                }
+            }
+        }
+
+        if (won.isPlayerOne()) {
+            // Printing firstPiece array
+            getDefanceNames(s, 2);
+
+            // Printing secondPiece array
+            getAttackNames(s, 2);
+        } else {
+            // Printing secondPiece array
+            getAttackNames(s, 2);
+            // Printing firstPiece array
+            getDefanceNames(s, 2);
+        }
 
 
         printStars();
