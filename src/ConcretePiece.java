@@ -6,16 +6,19 @@ public class ConcretePiece implements Piece {
     private Player owner;
     private int id;
     private int kills;
+    private int totalSteps;
 
     List<Position> position = new ArrayList<Position>();
 
     ConcretePiece() {}
 
-    ConcretePiece(String type, Player owner, int id, int kills){
+    ConcretePiece(String type, Player owner, int id, int kills, int totalSteps){
         this.type = type;
         this.owner = owner;
-        this.id=id;
+        this.id = id;
         this.kills = kills;
+        this.totalSteps = totalSteps;
+
     }
 
     ConcretePiece(String type,Player owner,Position pos){
@@ -40,18 +43,6 @@ public class ConcretePiece implements Piece {
     @java.lang.Override
     public String getType() {
         return type;
-    }
-
-    public void printMoves(String s){
-        System.out.print( s + ": " );
-        System.out.print("[");
-        for(int i=0;i<position.size();i++){
-            System.out.print("(" + position.get(i).getCol() + ", " + position.get(i).getRow() + ")");
-            if (i < position.size() -1 ) {
-                System.out.print(", ");
-            }
-        }
-        System.out.println("]");
     }
 
     public int getId() {
@@ -83,10 +74,32 @@ public class ConcretePiece implements Piece {
         this.kills ++;
     }
 
+    public int getTotalSteps() {
+        return kills;
+    }
+
+    public void addTotalSteps(int steps) {
+        this.totalSteps += steps;
+    }
+
+    public void printTotalSteps(String s) {
+        System.out.println( s + ": " + this.totalSteps + " squares");
+}
+
     public void printKills(String s) {
-        // if (this.kills > 0){
             System.out.println( s + ": " + this.kills + " kills");
-        // }
+    }
+
+    public void printMoves(String s){
+        System.out.print( s + ": " );
+        System.out.print("[");
+        for(int i=0;i<position.size();i++){
+            System.out.print("(" + position.get(i).getCol() + ", " + position.get(i).getRow() + ")");
+            if (i < position.size() -1 ) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println("]");
     }
 
 }

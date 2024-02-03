@@ -8,8 +8,8 @@ public class GameLogic implements PlayableLogic{
     private int boardSize = 11;
     private ConcretePiece[][] board = new ConcretePiece[boardSize][boardSize];
 
-    private ConcretePlayer firstPlayer = new ConcretePlayer(1, 0);
-    private ConcretePlayer secondPlayer = new ConcretePlayer(2, 0);;
+    private ConcretePlayer firstPlayer = new ConcretePlayer(1, 0, 0, 0);
+    private ConcretePlayer secondPlayer = new ConcretePlayer(2, 0, 0, 0);;
     private ConcretePiece[] firstPiece=new ConcretePiece[13];
     private ConcretePiece[] secondPiece=new ConcretePiece[24];
     List<Position> moves = new ArrayList<Position>();
@@ -30,6 +30,24 @@ public class GameLogic implements PlayableLogic{
             else {
                 secondPiece[p.getId() - 1].addPosition(b);
             }
+
+            if (a.getCol() == b.getCol()) {
+                int steps = Math.abs(a.getRow() - b.getRow());
+                if (p.getOwner().isPlayerOne()) {
+                    firstPlayer.setTotalSteps(steps);
+                } else {
+                    secondPlayer.setTotalSteps(steps);
+                }
+                p.addTotalSteps(steps);
+            } else {
+                int steps = Math.abs(a.getRow() - b.getRow());
+                if (p.getOwner().isPlayerOne()) {
+                    firstPlayer.setTotalSteps(steps);
+                } else {
+                    secondPlayer.setTotalSteps(steps);
+                }
+                p.addTotalSteps(steps);
+            }
             prevPiece.add((ConcretePiece) getPieceAtPosition(a));
             moves.add(b);
             b.addPiece((ConcretePiece)getPieceAtPosition(b));
@@ -40,6 +58,7 @@ public class GameLogic implements PlayableLogic{
                 reset();
             }
             isEating(b);
+           
             return true;
         }
 
@@ -68,11 +87,15 @@ public class GameLogic implements PlayableLogic{
             Piece currentPiece = getPieceAtPosition(getLast());
             if (getLast().isCorner() && currentPiece.getType().equals("♚")) {
                 firstPlayer.addWin();
+                firstPlayer.updateKillsOnWin();
+                firstPlayer.updateTotalStepsOnWin();
                 won=firstPlayer;
                 return true;
             }
             if (checkIfKingSurrounded()) {
                 secondPlayer.addWin();
+                secondPlayer.updateKillsOnWin();
+                secondPlayer.updateTotalStepsOnWin();
                 won=secondPlayer;
                 return true;
             }
@@ -90,6 +113,8 @@ public class GameLogic implements PlayableLogic{
         moves = new ArrayList<Position>();
         board = new ConcretePiece[boardSize][boardSize];
         createBoard(board);
+        firstPlayer.updateKillsOnWin();
+        secondPlayer.updateKillsOnWin();
 
     }
 //נועה לא לגעת
@@ -201,6 +226,7 @@ public class GameLogic implements PlayableLogic{
         }
         return king;
     }
+
     public void isEating(Position pos) {
         int pCol = pos.getCol();
         int pRow = pos.getRow();
@@ -220,6 +246,11 @@ public class GameLogic implements PlayableLogic{
                     eatmoves.add(new Position(kCol, kRow));
                     // add kills
                     board[pos.getCol()][pos.getRow()].addKills();
+                    if ( board[pos.getCol()][pos.getRow()].getOwner().isPlayerOne() ){
+                        firstPlayer.setKills();
+                    } else {
+                        secondPlayer.setKills();
+                    } 
 
                 }
 
@@ -232,6 +263,11 @@ public class GameLogic implements PlayableLogic{
                     eatmoves.add(new Position(kCol, kRow));
                     // add kills
                     board[pos.getCol()][pos.getRow()].addKills();
+                    if ( board[pos.getCol()][pos.getRow()].getOwner().isPlayerOne() ){
+                        firstPlayer.setKills();
+                    } else {
+                        secondPlayer.setKills();
+                    }
 
                 }
 
@@ -245,7 +281,11 @@ public class GameLogic implements PlayableLogic{
                         eatmoves.add(new Position(kCol, kRow));
                         // add kills
                         board[pos.getCol()][pos.getRow()].addKills();
-
+                        if ( board[pos.getCol()][pos.getRow()].getOwner().isPlayerOne() ){
+                            firstPlayer.setKills();
+                        } else {
+                            secondPlayer.setKills();
+                        }
                     }
                 }
 
@@ -258,7 +298,11 @@ public class GameLogic implements PlayableLogic{
                         eatmoves.add(new Position(kCol, kRow));
                         // add kills
                         board[pos.getCol()][pos.getRow()].addKills();
-
+                        if ( board[pos.getCol()][pos.getRow()].getOwner().isPlayerOne() ){
+                            firstPlayer.setKills();
+                        } else {
+                            secondPlayer.setKills();
+                        }
                     }
                 }
                 
@@ -380,7 +424,7 @@ public class GameLogic implements PlayableLogic{
 
     public void createBoard(Piece[][] board) {
         for (int i=0;i<24;i++){
-            secondPiece[i]=new Pawn(secondPlayer, (i+1), 0);
+            secondPiece[i]=new Pawn(secondPlayer, (i+1), 0, 0);
         }
         // create secondPlayer players
         board[0][3] = secondPiece[6];
@@ -421,9 +465,9 @@ public class GameLogic implements PlayableLogic{
         // create firstPlayer players
         for (int i=0;i<13;i++){
             if(i!=6)
-                firstPiece[i]=new Pawn(firstPlayer, (i+1), 0);
+                firstPiece[i]=new Pawn(firstPlayer, (i+1), 0, 0);
             else
-                firstPiece[i]=new King(firstPlayer, (i+1), 0);
+                firstPiece[i]=new King(firstPlayer, (i+1), 0, 0);
         }
 
         board[5][3] = firstPiece[0];
@@ -505,21 +549,50 @@ public class GameLogic implements PlayableLogic{
                 if ( comp == 1 ) {
                     piecesArr[i].printMoves(s);
                 }
+
                 if ( comp == 2 ) {
                     if( piecesArr[i].getKills() > 0 ) {
                         piecesArr[i].printKills(s);
+                    }
+                }
+                
+                if ( comp == 3 ) {
+                    if( piecesArr[i].getTotalSteps() > 0 ) {
+                        piecesArr[i].printTotalSteps(s);
                     }
                 }
             }
         }
     }
 
+    public void sortBySecComp(ConcretePiece[] arr, ComperatorByKills comparator) {
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length - i - 1; j++) {
+                if (comparator.compare(arr[j], arr[j + 1]) > 0) {
+                    ConcretePiece temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+    }
+
+    public void sortByThirdComp(ConcretePiece[] arr, ComperatorByDistance comparator) {
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length - i - 1; j++) {
+                if (comparator.compare(arr[j], arr[j + 1]) > 0) {
+                    ConcretePiece temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+    }
 
     public void printStatistic() {
         ComperatorBySteps comparator1 = new ComperatorBySteps();
         ComperatorByKills comparator2 = new ComperatorByKills();
-
-
+        ComperatorByDistance comparator3 = new ComperatorByDistance();
         ComperatorByStepedSquare comparator4 = new ComperatorByStepedSquare();
         // Sorting firstPiece array
         for (int i = 0; i < firstPiece.length; i++) {
@@ -543,7 +616,17 @@ public class GameLogic implements PlayableLogic{
             }
         }
 
-        String s="";
+        ConcretePiece[] sharedPieces = new ConcretePiece[firstPiece.length + secondPiece.length];
+ 
+        for (int i = 0; i < firstPiece.length; i++) {
+            sharedPieces[i] = firstPiece[i];
+        }
+
+        for (int i = 0; i < secondPiece.length; i++) {
+            sharedPieces[firstPiece.length + i] = secondPiece[i];
+        }
+
+        String s = "";
         if (won.isPlayerOne()) {
             // Printing firstPiece array
             getNames(s, 1, firstPiece);
@@ -558,44 +641,48 @@ public class GameLogic implements PlayableLogic{
 
         printStars();
 
-        ConcretePiece[] sharedPieces = new ConcretePiece[firstPiece.length + secondPiece.length];
- 
-        for (int i = 0; i < firstPiece.length; i++) {
-            sharedPieces[i] = firstPiece[i];
-        }
-
-        for (int i = 0; i < secondPiece.length; i++) {
-            sharedPieces[firstPiece.length + i] = secondPiece[i];
-        }
-
-        s="";
-        for (int i = 0; i < sharedPieces.length; i++) {
-            for (int j = 0; j < sharedPieces.length - i - 1; j++) {
-                if (comparator2.compare(sharedPieces[j], sharedPieces[j + 1]) > 0) {
-                    ConcretePiece temp = sharedPieces[j];
-                    sharedPieces[j] = sharedPieces[j + 1];
-                    sharedPieces[j + 1] = temp;
-                }
+        s = "";
+        if (firstPlayer.getKills() == secondPlayer.getKills()) {
+            sortBySecComp(firstPiece, comparator2);
+            sortBySecComp(secondPiece, comparator2);
+            if (won.isPlayerOne()) {
+                // Printing firstPiece array
+                getNames(s, 2, firstPiece);
+                // Printing secondPiece array
+                getNames(s, 2, secondPiece);
+            } else {
+                // Printing secondPiece array
+                getNames(s, 2, secondPiece);
+                // Printing firstPiece array
+                getNames(s, 2, firstPiece);
             }
+        } else {
+            sortBySecComp(sharedPieces, comparator2);
+            getNames(s, 2, sharedPieces);
         }
-
-        getNames(s, 2, sharedPieces);
-        // if (won.isPlayerOne()) {
-        //     // Printing firstPiece array
-        //     getDefanceNames(s, 2);
-
-        //     // Printing secondPiece array
-        //     getAttackNames(s, 2);
-        // } else {
-        //     // Printing secondPiece array
-        //     getAttackNames(s, 2);
-        //     // Printing firstPiece array
-        //     getDefanceNames(s, 2);
-        // }
-
 
         printStars();
-        //להוסיף את סעיף 3
+
+        s = "";
+        if (firstPlayer.getTotalSteps() == secondPlayer.getTotalSteps()) {
+            sortByThirdComp(firstPiece, comparator3);
+            sortByThirdComp(secondPiece, comparator3);
+            if (won.isPlayerOne()) {
+                // Printing firstPiece array
+                getNames(s, 3, firstPiece);
+                // Printing secondPiece array
+                getNames(s, 3, secondPiece);
+            } else {
+                // Printing secondPiece array
+                getNames(s, 3, secondPiece);
+                // Printing firstPiece array
+                getNames(s, 3, firstPiece);
+            }
+        } else {
+            sortByThirdComp(sharedPieces, comparator3);
+            getNames(s, 3, sharedPieces);
+        }
+
 
         printStars();
         //נועה שימי לב זה סעיף 4 תהיי עירנית וחדה על המטרה
