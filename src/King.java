@@ -3,8 +3,8 @@ import java.util.ArrayList;
 public class King extends ConcretePiece {
 
 ArrayList <Position> moves=new ArrayList<>();
-    King(ConcretePlayer owner, int playerName) {
-        super("♚" ,owner,playerName);
+    King(ConcretePlayer owner, int playerName, int kills) {
+        super("♚" ,owner,playerName, kills);
     }
 
     public boolean isWon(Position a) {

@@ -8,8 +8,8 @@ public class GameLogic implements PlayableLogic{
     private int boardSize = 11;
     private ConcretePiece[][] board = new ConcretePiece[boardSize][boardSize];
 
-    private ConcretePlayer firstPlayer = new ConcretePlayer(1, 0, 0);
-    private ConcretePlayer secondPlayer = new ConcretePlayer(2, 0, 0);;
+    private ConcretePlayer firstPlayer = new ConcretePlayer(1, 0);
+    private ConcretePlayer secondPlayer = new ConcretePlayer(2, 0);;
     private ConcretePiece[] firstPiece=new ConcretePiece[13];
     private ConcretePiece[] secondPiece=new ConcretePiece[24];
     List<Position> moves = new ArrayList<Position>();
@@ -218,6 +218,8 @@ public class GameLogic implements PlayableLogic{
                         eaten.addPosition(new Position(kCol, kRow));
                     eatPiece.add(eaten);
                     eatmoves.add(new Position(kCol, kRow));
+                    
+                    
                 }
 
                 if (isSameB(kCol, kRow + 1, getPieceAtPosition(pos).getOwner()) &&
@@ -368,7 +370,7 @@ public class GameLogic implements PlayableLogic{
 
     public void createBoard(Piece[][] board) {
         for (int i=0;i<24;i++){
-            secondPiece[i]=new Pawn(secondPlayer, (i+1));
+            secondPiece[i]=new Pawn(secondPlayer, (i+1), 0);
         }
         // create secondPlayer players
         board[0][3] = secondPiece[6];
@@ -409,9 +411,9 @@ public class GameLogic implements PlayableLogic{
         // create firstPlayer players
         for (int i=0;i<13;i++){
             if(i!=6)
-                firstPiece[i]=new Pawn(firstPlayer, (i+1));
+                firstPiece[i]=new Pawn(firstPlayer, (i+1), 0);
             else
-                firstPiece[i]=new King(firstPlayer, (i+1));
+                firstPiece[i]=new King(firstPlayer, (i+1), 0);
         }
 
         board[5][3] = firstPiece[0];

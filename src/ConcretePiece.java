@@ -5,15 +5,17 @@ public class ConcretePiece implements Piece {
     private String type;
     private Player owner;
     private int id;
+    private int kills;
+
     List<Position> position = new ArrayList<Position>();
 
-    ConcretePiece(){
-    }
+    ConcretePiece() {}
 
-    ConcretePiece(String type,Player owner,int id){
+    ConcretePiece(String type, Player owner, int id, int kills){
         this.type = type;
         this.owner = owner;
         this.id=id;
+        this.kills = kills;
     }
 
     ConcretePiece(String type,Player owner,Position pos){
@@ -25,7 +27,7 @@ public class ConcretePiece implements Piece {
     public void addPosition(Position position){
         this.position.add(position);
     }
-    
+
     public List<Position> GetPosition(){
         return this.position;
     }
@@ -71,6 +73,14 @@ public class ConcretePiece implements Piece {
         if (!position.isEmpty()) {
             position.remove(position.size() - 1);
         }
+    }
+
+    public int getKills() {
+        return kills;
+    }
+
+    public void addKills(){
+        this.kills ++;
     }
 
 }

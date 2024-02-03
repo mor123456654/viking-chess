@@ -2,12 +2,10 @@ public class ConcretePlayer implements Player{
 
     int wins;
     int player;
-    int kills;
 
-    ConcretePlayer(int player, int wins, int kills){
+    ConcretePlayer(int player, int wins){
         this.player = player;
         this.wins = wins;
-        this.kills = kills;
     }
 
     @Override
@@ -33,11 +31,4 @@ public class ConcretePlayer implements Player{
         this.wins = winsNumber;
     }
 
-    public int getKills() {
-        return kills;
-    }
-
-    public void addKills(){
-        this.kills ++;
-    }
 }
