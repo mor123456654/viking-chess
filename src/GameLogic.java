@@ -452,36 +452,62 @@ public class GameLogic implements PlayableLogic{
         System.out.print("\n");
     }
 
-    public void getDefanceNames(String s, int comp) {
-        for (int i = 0; i < firstPiece.length; i++) {
-            if (firstPiece[i].position.size() > 0) {
-                if (firstPiece[i].getId() != 7) {
-                    s = "D" + firstPiece[i].getId();
-                } else {
-                    s = "K" + firstPiece[i].getId();
+    // public void getDefanceNames(String s, int comp) {
+    //     for (int i = 0; i < firstPiece.length; i++) {
+    //         if (firstPiece[i].position.size() > 0) {
+    //             if (firstPiece[i].getId() != 7) {
+    //                 s = "D" + firstPiece[i].getId();
+    //             } else {
+    //                 s = "K" + firstPiece[i].getId();
+    //             }
+    //             if ( comp == 1 ){
+    //                 firstPiece[i].printMoves(s);
+    //             }
+    //             if ( comp == 2 ){
+    //                 if( firstPiece[i].getKills() > 0 ) {
+    //                     firstPiece[i].printKills(s);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+    // public void getAttackNames(String s, int comp) {
+    //     for (int i = 0; i < secondPiece.length ; i++) {
+    //         if (secondPiece[i].position.size() > 0) {
+    //             s = "A" + secondPiece[i].getId();
+    //             if ( comp == 1 ) {
+    //                 secondPiece[i].printMoves(s);
+    //             }
+    //             if ( comp == 2 ) {
+    //                 if( secondPiece[i].getKills() > 0 ) {
+    //                     secondPiece[i].printKills(s);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+    public void getNames(String s, int comp,  ConcretePiece[] piecesArr) {
+        for (int i = 0; i < piecesArr.length ; i++) {
+            if (piecesArr[i].position.size() > 0) {
+                if (piecesArr[i].getOwner().isPlayerOne()){
+                    s = "A" + piecesArr[i].getId();
                 }
-                if ( comp == 1 ){
-                    firstPiece[i].printMoves(s);
-                }
-                if ( comp == 2 ){
-                    if( firstPiece[i].getKills() > 0 ) {
-                        firstPiece[i].printKills(s);
+                else {
+                    if (piecesArr[i].getId() != 7) {
+                        s = "D" + piecesArr[i].getId();
+                    } else {
+                        s = "K" + piecesArr[i].getId();
                     }
                 }
-            }
-        }
-    }
 
-    public void getAttackNames(String s, int comp) {
-        for (int i = 0; i < secondPiece.length ; i++) {
-            if (secondPiece[i].position.size() > 0) {
-                s = "A" + secondPiece[i].getId();
                 if ( comp == 1 ) {
-                    secondPiece[i].printMoves(s);
+                    piecesArr[i].printMoves(s);
                 }
                 if ( comp == 2 ) {
-                    if( secondPiece[i].getKills() > 0 ) {
-                        secondPiece[i].printKills(s);
+                    if( piecesArr[i].getKills() > 0 ) {
+                        piecesArr[i].printKills(s);
                     }
                 }
             }
@@ -520,14 +546,14 @@ public class GameLogic implements PlayableLogic{
         String s="";
         if (won.isPlayerOne()) {
             // Printing firstPiece array
-            getDefanceNames(s, 1);
+            getNames(s, 1, firstPiece);
             // Printing secondPiece array
-            getAttackNames(s, 1);
+            getNames(s, 1, secondPiece);
         } else {
             // Printing secondPiece array
-            getAttackNames(s, 1);
+            getNames(s, 1, secondPiece);
             // Printing firstPiece array
-            getDefanceNames(s, 1);
+            getNames(s, 1, firstPiece);
         }
 
         printStars();
@@ -553,18 +579,19 @@ public class GameLogic implements PlayableLogic{
             }
         }
 
-        if (won.isPlayerOne()) {
-            // Printing firstPiece array
-            getDefanceNames(s, 2);
+        getNames(s, 2, sharedPieces);
+        // if (won.isPlayerOne()) {
+        //     // Printing firstPiece array
+        //     getDefanceNames(s, 2);
 
-            // Printing secondPiece array
-            getAttackNames(s, 2);
-        } else {
-            // Printing secondPiece array
-            getAttackNames(s, 2);
-            // Printing firstPiece array
-            getDefanceNames(s, 2);
-        }
+        //     // Printing secondPiece array
+        //     getAttackNames(s, 2);
+        // } else {
+        //     // Printing secondPiece array
+        //     getAttackNames(s, 2);
+        //     // Printing firstPiece array
+        //     getDefanceNames(s, 2);
+        // }
 
 
         printStars();
