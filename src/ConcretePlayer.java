@@ -50,15 +50,15 @@ public class ConcretePlayer implements Player{
     }
 
     public int getTotalSteps() {
-        return totalKills;
+        return totalSteps;
     }
 
-    public void setTotalSteps(int steps) {
+    public void addTotalSteps(int steps) {
         totalSteps += steps;
     }
 
     public void updateTotalStepsOnWin() {
-        totalKills = 0;
+        totalSteps = 0;
     }
 
 }

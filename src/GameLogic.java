@@ -31,23 +31,26 @@ public class GameLogic implements PlayableLogic{
                 secondPiece[p.getId() - 1].addPosition(b);
             }
 
-            if (a.getCol() == b.getCol()) {
-                int steps = Math.abs(a.getRow() - b.getRow());
-                if (p.getOwner().isPlayerOne()) {
-                    firstPlayer.setTotalSteps(steps);
-                } else {
-                    secondPlayer.setTotalSteps(steps);
-                }
-                p.addTotalSteps(steps);
-            } else {
-                int steps = Math.abs(a.getRow() - b.getRow());
-                if (p.getOwner().isPlayerOne()) {
-                    firstPlayer.setTotalSteps(steps);
-                } else {
-                    secondPlayer.setTotalSteps(steps);
-                }
-                p.addTotalSteps(steps);
+            // update steps for player and piece
+            int steps = Math.abs(a.getRow() - b.getRow());
+
+            if (steps == 0) {
+                steps =  Math.abs(a.getCol() - b.getCol());
             }
+
+            if (p.getOwner().isPlayerOne()) {
+                System.out.println("enter first");
+                firstPlayer.addTotalSteps(steps);
+            } else {
+                System.out.println("enter sec");
+
+                secondPlayer.addTotalSteps(steps);
+            }
+            p.addTotalSteps(steps);
+            System.out.println(secondPlayer.totalSteps + "sec ste");
+            System.out.println(steps);
+            System.out.println(p.getTotalSteps());
+
             prevPiece.add((ConcretePiece) getPieceAtPosition(a));
             moves.add(b);
             b.addPiece((ConcretePiece)getPieceAtPosition(b));
@@ -89,6 +92,8 @@ public class GameLogic implements PlayableLogic{
                 firstPlayer.addWin();
                 firstPlayer.updateKillsOnWin();
                 firstPlayer.updateTotalStepsOnWin();
+                secondPlayer.updateKillsOnWin();
+                secondPlayer.updateTotalStepsOnWin();
                 won=firstPlayer;
                 return true;
             }
@@ -96,6 +101,8 @@ public class GameLogic implements PlayableLogic{
                 secondPlayer.addWin();
                 secondPlayer.updateKillsOnWin();
                 secondPlayer.updateTotalStepsOnWin();
+                firstPlayer.updateKillsOnWin();
+                firstPlayer.updateTotalStepsOnWin();
                 won=secondPlayer;
                 return true;
             }
@@ -496,42 +503,6 @@ public class GameLogic implements PlayableLogic{
         System.out.print("\n");
     }
 
-    // public void getDefanceNames(String s, int comp) {
-    //     for (int i = 0; i < firstPiece.length; i++) {
-    //         if (firstPiece[i].position.size() > 0) {
-    //             if (firstPiece[i].getId() != 7) {
-    //                 s = "D" + firstPiece[i].getId();
-    //             } else {
-    //                 s = "K" + firstPiece[i].getId();
-    //             }
-    //             if ( comp == 1 ){
-    //                 firstPiece[i].printMoves(s);
-    //             }
-    //             if ( comp == 2 ){
-    //                 if( firstPiece[i].getKills() > 0 ) {
-    //                     firstPiece[i].printKills(s);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-    // public void getAttackNames(String s, int comp) {
-    //     for (int i = 0; i < secondPiece.length ; i++) {
-    //         if (secondPiece[i].position.size() > 0) {
-    //             s = "A" + secondPiece[i].getId();
-    //             if ( comp == 1 ) {
-    //                 secondPiece[i].printMoves(s);
-    //             }
-    //             if ( comp == 2 ) {
-    //                 if( secondPiece[i].getKills() > 0 ) {
-    //                     secondPiece[i].printKills(s);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
     public void getNames(String s, int comp,  ConcretePiece[] piecesArr) {
         for (int i = 0; i < piecesArr.length ; i++) {
             if (piecesArr[i].position.size() > 0) {
@@ -555,7 +526,7 @@ public class GameLogic implements PlayableLogic{
                         piecesArr[i].printKills(s);
                     }
                 }
-                
+
                 if ( comp == 3 ) {
                     if( piecesArr[i].getTotalSteps() > 0 ) {
                         piecesArr[i].printTotalSteps(s);
@@ -664,6 +635,10 @@ public class GameLogic implements PlayableLogic{
         printStars();
 
         s = "";
+        System.out.println("first than sec");
+        System.out.println(firstPlayer.getTotalSteps() );
+        System.out.println(secondPlayer.getTotalSteps() );
+
         if (firstPlayer.getTotalSteps() == secondPlayer.getTotalSteps()) {
             sortByThirdComp(firstPiece, comparator3);
             sortByThirdComp(secondPiece, comparator3);

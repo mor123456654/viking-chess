@@ -75,7 +75,7 @@ public class ConcretePiece implements Piece {
     }
 
     public int getTotalSteps() {
-        return kills;
+        return totalSteps;
     }
 
     public void addTotalSteps(int steps) {
