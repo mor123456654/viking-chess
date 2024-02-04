@@ -39,17 +39,12 @@ public class GameLogic implements PlayableLogic{
             }
 
             if (p.getOwner().isPlayerOne()) {
-                System.out.println("enter first");
                 firstPlayer.addTotalSteps(steps);
             } else {
-                System.out.println("enter sec");
-
                 secondPlayer.addTotalSteps(steps);
             }
+
             p.addTotalSteps(steps);
-            System.out.println(secondPlayer.totalSteps + "sec ste");
-            System.out.println(steps);
-            System.out.println(p.getTotalSteps());
 
             prevPiece.add((ConcretePiece) getPieceAtPosition(a));
             moves.add(b);
@@ -539,7 +534,7 @@ public class GameLogic implements PlayableLogic{
     public void sortBySecComp(ConcretePiece[] arr, ComperatorByKills comparator) {
         for (int i = 0; i < arr.length; i++) {
             for (int j = 0; j < arr.length - i - 1; j++) {
-                if (comparator.compare(arr[j], arr[j + 1]) > 0) {
+                if (comparator.compare(arr[j], arr[j + 1]) < 0) {
                     ConcretePiece temp = arr[j];
                     arr[j] = arr[j + 1];
                     arr[j + 1] = temp;
@@ -551,7 +546,7 @@ public class GameLogic implements PlayableLogic{
     public void sortByThirdComp(ConcretePiece[] arr, ComperatorByDistance comparator) {
         for (int i = 0; i < arr.length; i++) {
             for (int j = 0; j < arr.length - i - 1; j++) {
-                if (comparator.compare(arr[j], arr[j + 1]) > 0) {
+                if (comparator.compare(arr[j], arr[j + 1]) < 0) {
                     ConcretePiece temp = arr[j];
                     arr[j] = arr[j + 1];
                     arr[j + 1] = temp;
