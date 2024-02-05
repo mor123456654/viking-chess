@@ -73,7 +73,9 @@ public class ConcretePiece implements Piece {
     public void addKills() {
         this.kills ++;
     }
-
+    public void removeKill() {
+        this.kills --;
+    }
     public int getTotalSteps() {
         return totalSteps;
     }

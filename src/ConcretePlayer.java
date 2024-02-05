@@ -56,6 +56,9 @@ public class ConcretePlayer implements Player{
     public void addTotalSteps(int steps) {
         totalSteps += steps;
     }
+    public void subtractTotalSteps(int steps) {
+        totalSteps += steps;
+    }
 
     public void updateTotalStepsOnWin() {
         totalSteps = 0;
