@@ -630,9 +630,6 @@ public class GameLogic implements PlayableLogic{
         printStars();
 
         s = "";
-        System.out.println("first than sec");
-        System.out.println(firstPlayer.getTotalSteps() );
-        System.out.println(secondPlayer.getTotalSteps() );
 
         if (firstPlayer.getTotalSteps() == secondPlayer.getTotalSteps()) {
             sortByThirdComp(firstPiece, comparator3);
