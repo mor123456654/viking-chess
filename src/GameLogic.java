@@ -502,14 +502,14 @@ public class GameLogic implements PlayableLogic{
         for (int i = 0; i < piecesArr.length ; i++) {
             if (piecesArr[i].position.size() > 0) {
                 if (piecesArr[i].getOwner().isPlayerOne()){
-                    s = "A" + piecesArr[i].getId();
-                }
-                else {
                     if (piecesArr[i].getId() != 7) {
                         s = "D" + piecesArr[i].getId();
                     } else {
                         s = "K" + piecesArr[i].getId();
                     }
+                }
+                else {
+                    s = "A" + piecesArr[i].getId();
                 }
 
                 if ( comp == 1 ) {
