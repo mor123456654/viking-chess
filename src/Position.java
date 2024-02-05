@@ -3,6 +3,7 @@ import java.util.List;
 
 public class Position {
 
+    int counter;
     private int row;
     private int col;
     Piece piece=null;
@@ -11,6 +12,7 @@ public class Position {
     Position(int col,int row){
         this.row= row;
         this.col= col;
+        counter=0;
     }
 
     public void addPiece(ConcretePiece p){
@@ -58,11 +60,17 @@ public class Position {
         return ( row == 10 && col == 9 ) || ( row == 10 && col == 1 ) || ( row == 9 && col == 10 ) || ( row == 0 && col == 1 ) || ( row == 0 && col == 9 ) || ( row == 9 && col == 0 ) || ( row == 1 && col == 0 ) || ( row == 1 && col == 10 );
     }
 
-    // public void isEating(){
+    public void addCounter(){counter++;}
+    public void removeCounter(){counter--;}
 
-    // }
-    public void printMoves(){
-        System.out.println( "(" + getCol() + ", " + getRow() + ")" + difPiece.size() + " pieces" );
+    public int getCounter() {
+        return counter;
     }
-
+public boolean isEqual(Position pos){
+        return this.row== pos.getRow() && this.col== pos.getCol();
 }
+    public void printMoves(){
+        System.out.println("(" + col + ", " + row + ")"+counter+" pieces");
+    }
+}
+
