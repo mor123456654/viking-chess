@@ -653,7 +653,6 @@ public class GameLogic implements PlayableLogic{
             getNames(s, 3, sharedPieces);
         }
 
-
         printStars();
         //נועה שימי לב זה סעיף 4 תהיי עירנית וחדה על המטרה
        // ..המון הצלחה במילואים
