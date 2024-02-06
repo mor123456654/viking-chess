@@ -1,30 +1,27 @@
-public class ConcretePlayer implements Player{
+public class ConcretePlayer implements Player {
 
     int wins;
     int player;
     int totalKills;
     int totalSteps;
 
-    ConcretePlayer(int player, int wins, int totalKills, int totalSteps){
+    ConcretePlayer(int player, int wins, int totalKills, int totalSteps) {
         this.player = player;
         this.wins = wins;
         this.totalKills = totalKills;
         this.totalSteps = totalSteps;
-
     }
 
     @Override
     public boolean isPlayerOne() {
-        if ( player == 1 ) { 
+        if (player == 1) {
             return true;
         }
-
         return false;
-
     }
 
     public void addWin() {
-        this.wins ++;
+        this.wins++;
     }
 
     @Override
@@ -42,7 +39,7 @@ public class ConcretePlayer implements Player{
     }
 
     public void setKills() {
-        totalKills ++;
+        totalKills++;
     }
 
     public void updateKillsOnWin() {
@@ -56,6 +53,7 @@ public class ConcretePlayer implements Player{
     public void addTotalSteps(int steps) {
         totalSteps += steps;
     }
+
     public void subtractTotalSteps(int steps) {
         totalSteps += steps;
     }
@@ -63,5 +61,4 @@ public class ConcretePlayer implements Player{
     public void updateTotalStepsOnWin() {
         totalSteps = 0;
     }
-
 }
