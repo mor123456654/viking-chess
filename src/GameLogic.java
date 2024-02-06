@@ -1,7 +1,5 @@
 import java.util.ArrayList;
-import java.util.Stack;
 import java.util.List;
-import java.util.Map;
 
 public class GameLogic implements PlayableLogic {
     ConcretePlayer won = null;
@@ -10,7 +8,6 @@ public class GameLogic implements PlayableLogic {
 
     private ConcretePlayer firstPlayer = new ConcretePlayer(1, 0, 0, 0);
     private ConcretePlayer secondPlayer = new ConcretePlayer(2, 0, 0, 0);
-    ;
     private ConcretePiece[] firstPiece = new ConcretePiece[13];
     private ConcretePiece[] secondPiece = new ConcretePiece[24];
     List<Position> moves = new ArrayList<Position>();
@@ -133,15 +130,18 @@ public class GameLogic implements PlayableLogic {
             movedPiece.GetPosition().remove(movedPiece.GetPosition().size() - 1);
             Position originalPosition = movedPiece.GetPosition().get(movedPiece.GetPosition().size() - 1);
             if (originalPosition != null) {
-                board[lastMove.getCol()][lastMove.getRow()] = null; // Clear the moved position
-                board[originalPosition.getCol()][originalPosition.getRow()] = movedPiece; // Restore the piece to its original position
+                // Clear the moved position
+                board[lastMove.getCol()][lastMove.getRow()] = null; 
+                // Restore the piece to its original position
+                board[originalPosition.getCol()][originalPosition.getRow()] = movedPiece; 
 
                 while (!eatPiece.isEmpty() && !eatmoves.isEmpty()) {
                     Position eatPosition = eatmoves.get(eatmoves.size() - 1);
                     ConcretePiece eatenPiece = eatPiece.get(eatPiece.size() - 1);
 
                     if (isAdjacent(eatPosition, currentPosition)) {
-                        board[eatPosition.getCol()][eatPosition.getRow()] = eatenPiece; // Restore eaten piece
+                         // Restore eaten piece
+                        board[eatPosition.getCol()][eatPosition.getRow()] = eatenPiece;
                         eatPiece.remove(eatPiece.size() - 1);
                         eatmoves.remove(eatmoves.size() - 1);
                         movedPiece.removeKill();
@@ -165,7 +165,8 @@ public class GameLogic implements PlayableLogic {
 
     // Helper method to check if two positions are adjacent
     private boolean isAdjacent(Position pos1, Position pos2) {
-        return (Math.abs(pos1.getCol() - pos2.getCol()) == 1 && Math.abs(pos1.getRow() - pos2.getRow()) == 0) || ((Math.abs(pos1.getCol() - pos2.getCol()) == 0 && Math.abs(pos1.getRow() - pos2.getRow()) == 1));
+        return (Math.abs(pos1.getCol() - pos2.getCol()) == 1 && Math.abs(pos1.getRow() - pos2.getRow()) == 0)
+                || ((Math.abs(pos1.getCol() - pos2.getCol()) == 0 && Math.abs(pos1.getRow() - pos2.getRow()) == 1));
     }
 
     @Override
@@ -194,7 +195,6 @@ public class GameLogic implements PlayableLogic {
             return (kingPosition.isNearWall() && redAround == 3) || (redAround == 4);
         }
 
-
         return false;
     }
 
@@ -206,13 +206,11 @@ public class GameLogic implements PlayableLogic {
         return 0;
     }
 
-
     public Position isKingNear() {
         Position king = new Position(-1, -1);
         if (getLast() != null) {
             int pCol = getLast().getCol();
             int pRow = getLast().getRow();
-
 
             if (pCol + 1 < boardSize && board[pCol + 1][pRow] != null) {
                 if (board[pCol + 1][pRow].getType().equals("♚")) {
@@ -288,7 +286,8 @@ public class GameLogic implements PlayableLogic {
 
                 if (position.get(position.size() - 1).isNearWall()) {
                     // Check if the enemy piece is on the other side of the wall
-                    if ((10 == kCol && 9 == pCol) || (0 == kCol && 1 == pCol) || (10 == kRow && 9 == pRow) || (0 == kRow && 1 == pRow)) {
+                    if ((10 == kCol && 9 == pCol) || (0 == kCol && 1 == pCol) || (10 == kRow && 9 == pRow)
+                            || (0 == kRow && 1 == pRow)) {
                         board[kCol][kRow] = null;
                         if (eaten.GetPosition() != null && eaten.GetPosition().equals(new Position(kCol, kRow)))
                             eaten.addPosition(new Position(kCol, kRow));
@@ -305,7 +304,8 @@ public class GameLogic implements PlayableLogic {
                 }
 
                 if (position.get(position.size() - 1).isNearCorner()) {
-                    if ((9 == kCol && 8 == pCol) || (1 == kCol && 2 == pCol) || (9 == kRow && 8 == pRow) || (1 == kRow && 2 == pRow)) {
+                    if ((9 == kCol && 8 == pCol) || (1 == kCol && 2 == pCol) || (9 == kRow && 8 == pRow)
+                            || (1 == kRow && 2 == pRow)) {
                         board[kCol][kRow] = null;
                         if (eaten.GetPosition() != null && eaten.GetPosition().equals(new Position(kCol, kRow)))
                             eaten.addPosition(new Position(kCol, kRow));
@@ -328,7 +328,8 @@ public class GameLogic implements PlayableLogic {
 
     private boolean isSameB(int Col, int Row, Player owner) {
         if (Col >= 0 && Col < boardSize && Row >= 0 && Row < boardSize &&
-                board[Col][Row] != null && board[Col][Row].getOwner().equals(owner) && !board[Col][Row].getType().equals("♚")) {
+                board[Col][Row] != null && board[Col][Row].getOwner().equals(owner)
+                && !board[Col][Row].getType().equals("♚")) {
             return true;
         }
         return false;
@@ -340,24 +341,31 @@ public class GameLogic implements PlayableLogic {
             int pCol = getLast().getCol();
             int pRow = getLast().getRow();
 
-
-            if (pCol + 1 < boardSize && board[pCol + 1][pRow] != null && getPieceAtPosition(new Position(pCol + 1, pRow)) != null) {
-                if (!me.getOwner().equals(board[pCol + 1][pRow].getOwner()) && !board[pCol + 1][pRow].getType().equals("♚")) {
+            if (pCol + 1 < boardSize && board[pCol + 1][pRow] != null
+                    && getPieceAtPosition(new Position(pCol + 1, pRow)) != null) {
+                if (!me.getOwner().equals(board[pCol + 1][pRow].getOwner())
+                        && !board[pCol + 1][pRow].getType().equals("♚")) {
                     enemy.add(new Position(pCol + 1, pRow));
                 }
             }
-            if (pCol - 1 >= 0 && board[pCol - 1][pRow] != null && getPieceAtPosition(new Position(pCol - 1, pRow)) != null) {
-                if (!me.getOwner().equals(board[pCol - 1][pRow].getOwner()) && !board[pCol - 1][pRow].getType().equals("♚")) {
+            if (pCol - 1 >= 0 && board[pCol - 1][pRow] != null
+                    && getPieceAtPosition(new Position(pCol - 1, pRow)) != null) {
+                if (!me.getOwner().equals(board[pCol - 1][pRow].getOwner())
+                        && !board[pCol - 1][pRow].getType().equals("♚")) {
                     enemy.add(new Position(pCol - 1, pRow));
                 }
             }
-            if (pRow + 1 < boardSize && board[pCol][pRow + 1] != null && getPieceAtPosition(new Position(pCol, pRow + 1)) != null) {
-                if (!me.getOwner().equals(board[pCol][pRow + 1].getOwner()) && !board[pCol][pRow + 1].getType().equals("♚")) {
+            if (pRow + 1 < boardSize && board[pCol][pRow + 1] != null
+                    && getPieceAtPosition(new Position(pCol, pRow + 1)) != null) {
+                if (!me.getOwner().equals(board[pCol][pRow + 1].getOwner())
+                        && !board[pCol][pRow + 1].getType().equals("♚")) {
                     enemy.add(new Position(pCol, pRow + 1));
                 }
             }
-            if (pRow - 1 >= 0 && board[pCol][pRow - 1] != null && getPieceAtPosition(new Position(pCol, pRow - 1)) != null) {
-                if (!me.getOwner().equals(board[pCol][pRow - 1].getOwner()) && !board[pCol][pRow - 1].getType().equals("♚")) {
+            if (pRow - 1 >= 0 && board[pCol][pRow - 1] != null
+                    && getPieceAtPosition(new Position(pCol, pRow - 1)) != null) {
+                if (!me.getOwner().equals(board[pCol][pRow - 1].getOwner())
+                        && !board[pCol][pRow - 1].getType().equals("♚")) {
                     enemy.add(new Position(pCol, pRow - 1));
                 }
             }
@@ -418,7 +426,8 @@ public class GameLogic implements PlayableLogic {
             RowStep = 0;
         }
         // check is it corner
-        if (((endCol == 0 && endRow == 0) || (endCol == 10 && endRow == 0) || (endCol == 0 && endRow == 10) || (endCol == 10 && endRow == 10)) && getPieceAtPosition(startingPosition).getType().equals("♙"))
+        if (((endCol == 0 && endRow == 0) || (endCol == 10 && endRow == 0) || (endCol == 0 && endRow == 10)
+                || (endCol == 10 && endRow == 10)) && getPieceAtPosition(startingPosition).getType().equals("♙"))
             return false;
         // Check for horizontal or vertical movement
         if ((ColStep != 0 && RowStep == 0) || (ColStep == 0 && RowStep != 0)) {
@@ -434,7 +443,6 @@ public class GameLogic implements PlayableLogic {
         }
         return true;
     }
-
 
     public void createBoard(Piece[][] board) {
         for (int i = 0; i < 24; i++) {
@@ -458,7 +466,6 @@ public class GameLogic implements PlayableLogic {
 
         board[9][5] = secondPiece[12];
 
-
         board[3][0] = secondPiece[0];
         board[4][0] = secondPiece[1];
         board[5][0] = secondPiece[2];
@@ -466,7 +473,6 @@ public class GameLogic implements PlayableLogic {
         board[7][0] = secondPiece[4];
 
         board[5][9] = secondPiece[18];
-
 
         board[3][10] = secondPiece[19];
         board[4][10] = secondPiece[20];
@@ -576,13 +582,14 @@ public class GameLogic implements PlayableLogic {
                     arr.set(j, arr.get(j + 1));
                     arr.set(j + 1, temp);
                 }
-                if (comparator.compare(arr.get(j), arr.get(j + 1)) == 0){
-                    if (arr.get(j).getRow()==arr.get(j+1).getRow()&&arr.get(j).getCol()<arr.get(j+1).getCol()) {
+                if (comparator.compare(arr.get(j), arr.get(j + 1)) == 0) {
+                    if (arr.get(j).getRow() == arr.get(j + 1).getRow()
+                            && arr.get(j).getCol() < arr.get(j + 1).getCol()) {
                         Position temp = arr.get(j);
                         arr.set(j, arr.get(j + 1));
                         arr.set(j + 1, temp);
                     }
-                    if (arr.get(j).getRow()<arr.get(j+1).getRow()) {
+                    if (arr.get(j).getRow() < arr.get(j + 1).getRow()) {
                         Position temp = arr.get(j);
                         arr.set(j, arr.get(j + 1));
                         arr.set(j + 1, temp);
@@ -692,11 +699,11 @@ public class GameLogic implements PlayableLogic {
 
         List<Position> pos = new ArrayList<Position>();
         for (int i = 0; i < moves.size(); i++) {
-            boolean check=false;
+            boolean check = false;
             for (int j = 0; j < pos.size(); j++) {
                 if (pos.get(j).isEqual(moves.get(i))) {
                     pos.get(j).addCounter();
-                    check=true;
+                    check = true;
                     break;
                 }
             }
@@ -704,13 +711,12 @@ public class GameLogic implements PlayableLogic {
                 pos.add(moves.get(i));
             }
         }
-        sortByForthComp(pos,comparator4);
-         for (int i=0; i<pos.size();i++){
-             if (pos.get(i).getCounter()>1)
-             pos.get(i).printMoves();
-         }
+        sortByForthComp(pos, comparator4);
+        for (int i = 0; i < pos.size(); i++) {
+            if (pos.get(i).getCounter() > 1)
+                pos.get(i).printMoves();
+        }
     }
-
 
     public void sortArrays(ConcretePiece[] arr) {
         int n = arr.length;
@@ -726,5 +732,3 @@ public class GameLogic implements PlayableLogic {
     }
 
 }
-
-
