@@ -58,6 +58,7 @@ public class GameLogic implements PlayableLogic {
             board[a.getCol()][a.getRow()] = null;
             if (isGameFinished()) {
                 printStatistic();
+                // reset each player kills and steps
                 firstPlayer.updateKillsOnWin();
                 firstPlayer.updateTotalStepsOnWin();
                 secondPlayer.updateKillsOnWin();
@@ -180,6 +181,7 @@ public class GameLogic implements PlayableLogic {
         return null;
     }
 
+    // a function to check id king surrounded as the term to win for the attack player
     public boolean checkIfKingSurrounded() {
         int redAround = 0;
         Position kingPosition = isKingNear();
@@ -518,6 +520,7 @@ public class GameLogic implements PlayableLogic {
         System.out.print("\n");
     }
 
+    // get prints for each compartor according to the player
     public void getNames(String s, int comp, ConcretePiece[] piecesArr) {
         for (int i = 0; i < piecesArr.length; i++) {
             if (piecesArr[i].position.size() > 0) {
