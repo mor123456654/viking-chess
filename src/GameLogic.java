@@ -132,16 +132,16 @@ public class GameLogic implements PlayableLogic {
             Position originalPosition = movedPiece.GetPosition().get(movedPiece.GetPosition().size() - 1);
             if (originalPosition != null) {
                 // Clear the moved position
-                board[lastMove.getCol()][lastMove.getRow()] = null; 
+                board[lastMove.getCol()][lastMove.getRow()] = null;
                 // Restore the piece to its original position
-                board[originalPosition.getCol()][originalPosition.getRow()] = movedPiece; 
+                board[originalPosition.getCol()][originalPosition.getRow()] = movedPiece;
 
                 while (!eatPiece.isEmpty() && !eatmoves.isEmpty()) {
                     Position eatPosition = eatmoves.get(eatmoves.size() - 1);
                     ConcretePiece eatenPiece = eatPiece.get(eatPiece.size() - 1);
 
                     if (isAdjacent(eatPosition, currentPosition)) {
-                         // Restore eaten piece
+                        // Restore eaten piece
                         board[eatPosition.getCol()][eatPosition.getRow()] = eatenPiece;
                         eatPiece.remove(eatPiece.size() - 1);
                         eatmoves.remove(eatmoves.size() - 1);
@@ -181,7 +181,8 @@ public class GameLogic implements PlayableLogic {
         return null;
     }
 
-    // a function to check id king surrounded as the term to win for the attack player
+    // a function to check id king surrounded as the term to win for the attack
+    // player
     public boolean checkIfKingSurrounded() {
         int redAround = 0;
         Position kingPosition = isKingNear();
@@ -700,7 +701,8 @@ public class GameLogic implements PlayableLogic {
 
         printStars();
 
-        List<Position> pos = new ArrayList<Position>();
+        List<Position> pos = new ArrayList<Position>(moves);
+
         for (int i = 0; i < moves.size(); i++) {
             boolean check = false;
             for (int j = 0; j < pos.size(); j++) {
