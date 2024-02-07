@@ -5,26 +5,33 @@ public class ConcretePiece implements Piece {
     private String type;
     private Player owner;
     private int id;
+    private int kills;
+    private int totalSteps;
+
     List<Position> position = new ArrayList<Position>();
-    ConcretePiece(){
+
+    ConcretePiece() {
     }
-    ConcretePiece(String type,Player owner,int id){
+
+    ConcretePiece(String type, Player owner, int id, int kills, int totalSteps) {
         this.type = type;
         this.owner = owner;
-        this.id=id;
+        this.id = id;
+        this.kills = kills;
+        this.totalSteps = totalSteps;
     }
-    ConcretePiece(String type,Player owner,Position pos){
+
+    ConcretePiece(String type, Player owner, Position pos) {
         this.type = type;
         this.owner = owner;
         this.position.add(pos);
     }
 
-
-
-    public void addPosition(Position position){
+    public void addPosition(Position position) {
         this.position.add(position);
     }
-    public List<Position> GetPosition(){
+
+    public List<Position> GetPosition() {
         return this.position;
     }
 
@@ -37,20 +44,11 @@ public class ConcretePiece implements Piece {
     public String getType() {
         return type;
     }
-    public void printMoves(String s){
-        System.out.print(s+": ");
-        System.out.print("[");
-        for(int i=0;i<position.size();i++){
-            System.out.print("(" + position.get(i).getCol() + ", " + position.get(i).getRow() + ")");
-            if (i < position.size() -1 ) {
-                System.out.print(", ");
-            }
-        }
-        System.out.println("]");
-    }
+
     public int getId() {
         return id;
     }
+
     public void setOwner(Player owner) {
         this.owner = owner;
     }
@@ -58,6 +56,7 @@ public class ConcretePiece implements Piece {
     public void setType(String type) {
         this.type = type;
     }
+
     public List<Position> getPositions() {
         return this.position;
     }
@@ -68,5 +67,43 @@ public class ConcretePiece implements Piece {
         }
     }
 
+    public int getKills() {
+        return kills;
+    }
 
+    public void addKills() {
+        this.kills++;
+    }
+
+    public void removeKill() {
+        this.kills--;
+    }
+
+    public int getTotalSteps() {
+        return totalSteps;
+    }
+
+    public void addTotalSteps(int steps) {
+        this.totalSteps += steps;
+    }
+
+    public void printTotalSteps(String s) {
+        System.out.println(s + ": " + this.totalSteps + " squares");
+    }
+
+    public void printKills(String s) {
+        System.out.println(s + ": " + this.kills + " kills");
+    }
+
+    public void printMoves(String s) {
+        System.out.print(s + ": ");
+        System.out.print("[");
+        for (int i = 0; i < position.size(); i++) {
+            System.out.print("(" + position.get(i).getCol() + ", " + position.get(i).getRow() + ")");
+            if (i < position.size() - 1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println("]");
+    }
 }
