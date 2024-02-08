@@ -47,6 +47,7 @@ public class Position {
         return col;
     }
 
+    // Check if the position is corner, so we can use it in case of eating/king wins
     public boolean isCorner() {
         if (row == 0 && col == 0 || row == 10 && col == 10 || row == 10 && col == 0 || row == 0 && col == 10) {
             return true;
@@ -63,7 +64,8 @@ public class Position {
                 || (row == 0 && col == 9) || (row == 9 && col == 0) || (row == 1 && col == 0)
                 || (row == 1 && col == 10);
     }
-
+    
+    // add counter to check the number of steps for each position
     public void addCounter() {
         counter++;
     }

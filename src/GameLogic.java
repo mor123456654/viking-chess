@@ -19,6 +19,13 @@ public class GameLogic implements PlayableLogic {
         createBoard(board);
     }
 
+    // to allow move we will first check if the move is valid according to game
+    // rules.
+    // if so than we will set the board according to the new position of the piece
+    // this function will also add each player and each piece steps, to add for the
+    // statistics.
+    // at the end we will check if the move made the game finished, and if so
+    // updating the board, players and pieces accrding to it.
     @Override
     public boolean move(Position a, Position b) {
         if (isValid(a, b)) {
@@ -51,6 +58,7 @@ public class GameLogic implements PlayableLogic {
 
             p.addTotalSteps(steps);
 
+            // add the position to game moves and update board
             prevPiece.add((ConcretePiece) getPieceAtPosition(a));
             moves.add(b);
             b.addPiece((ConcretePiece) getPieceAtPosition(b));
@@ -209,6 +217,7 @@ public class GameLogic implements PlayableLogic {
         return 0;
     }
 
+    // check if there is a king near the piece
     public Position isKingNear() {
         Position king = new Position(-1, -1);
         if (getLast() != null) {
@@ -243,10 +252,12 @@ public class GameLogic implements PlayableLogic {
         return king;
     }
 
+    // check if in the move the player has done, he managed to eat rivals
     public void isEating(Position pos) {
         int pCol = pos.getCol();
         int pRow = pos.getRow();
         List<Position> position = isEnemyNear(getPieceAtPosition(pos));
+        // check the case that pawn is eating
         if (getPieceAtPosition(pos) != null && !getPieceAtPosition(pos).getType().equals("♚")) {
             while (!position.isEmpty()) {
                 int kCol = position.get(position.size() - 1).getCol();
@@ -338,6 +349,7 @@ public class GameLogic implements PlayableLogic {
         return false;
     }
 
+    // check if there is an enemy near the piece
     public List<Position> isEnemyNear(Piece me) {
         List<Position> enemy = new ArrayList<>();
         if (getLast() != null) {
@@ -377,6 +389,7 @@ public class GameLogic implements PlayableLogic {
 
     }
 
+    // check if the move the player done is valid according to the game rules
     public boolean isValid(Position startingPosition, Position destinationPosition) {
 
         int startCol = startingPosition.getCol();
@@ -447,6 +460,7 @@ public class GameLogic implements PlayableLogic {
         return true;
     }
 
+    // create inital board
     public void createBoard(Piece[][] board) {
         for (int i = 0; i < 24; i++) {
             secondPiece[i] = new Pawn(secondPlayer, (i + 1), 0, 0);
@@ -512,6 +526,7 @@ public class GameLogic implements PlayableLogic {
 
     }
 
+    // print line of 75 stars for statistics
     public void printStars() {
         sortArrays(firstPiece);
         sortArrays(secondPiece);
@@ -521,7 +536,8 @@ public class GameLogic implements PlayableLogic {
         System.out.print("\n");
     }
 
-    // get prints for each compartor according to the player
+    // get prints for each compartor according to the player and the matching
+    // comprator
     public void getNames(String s, int comp, ConcretePiece[] piecesArr) {
         for (int i = 0; i < piecesArr.length; i++) {
             if (piecesArr[i].position.size() > 0) {
@@ -578,6 +594,8 @@ public class GameLogic implements PlayableLogic {
         }
     }
 
+    // sort the array accroding the 4 comprator and if there are some position that
+    // has an equal number than sort according to x and y
     public void sortByForthComp(List<Position> arr, ComperatorByStepedSquare comparator) {
         for (int i = 0; i < arr.size(); i++) {
             for (int j = 0; j < arr.size() - i - 1; j++) {
