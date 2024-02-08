@@ -719,7 +719,7 @@ public class GameLogic implements PlayableLogic {
 
         printStars();
 
-        List<Position> pos = new ArrayList<Position>(moves);
+        List<Position> pos = new ArrayList<>(moves);
 
         for (int i = 0; i < moves.size(); i++) {
             boolean check = false;
