@@ -1,4 +1,4 @@
-# Chess-Like Game Logic
+# viking-chess Game Logic
 
 This Java project provides a flexible and extensible framework for implementing the logic of a chess-like board game. It offers essential functionality for managing players, pieces, and game rules.
 
