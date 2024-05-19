@@ -34,19 +34,4 @@ To use this project in your own Java application:
 
 ## Tests
 
-### GameLogic Test
-
-- **Objective**: Ensure that the core game logic functions correctly.
-- **Steps**:
-  1. Set up a game with predefined pieces and players.
-  2. Execute various game actions such as moving pieces, capturing opponents' pieces, and checking for victory conditions.
-  3. Verify that the game state is consistent with the expected outcomes after each action.
-
-### Piece Behavior Test
-
-- **Objective**: Validate the behavior of individual game pieces.
-- **Steps**:
-  1. Test the movement patterns of each type of piece, including normal movement, capturing opponent pieces, and special moves (if any).
-  2. Confirm that pieces behave according to the rules defined for their type and that illegal moves are not allowed.
-
-
+for test run GameLogicTest.java, TestA.java
