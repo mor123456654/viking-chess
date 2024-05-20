@@ -19,7 +19,7 @@ The project consists of several key components:
 - **Extensive Documentation**: The codebase is thoroughly documented to facilitate understanding and modification.
 
 ## Usage
-
+run main.java
 To use this project in your own Java application:
 
 1. **Integrate the Code**: Copy the necessary classes (`GameLogic`, `Piece`, `Player`, etc.) into your project directory.
