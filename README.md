@@ -33,5 +33,7 @@ To use this project in your own Java application:
 
 ## Tests
 
-run GameLogicTest.java, TestA.java
+- run GameLogicTest.java
+- Expected result: succses message upon test complition
+- run TestA.java
 - Expected result: succses message upon test complition
