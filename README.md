@@ -30,7 +30,6 @@ To use this project in your own Java application:
    
 4. **Implement UI (Optional)**: Create a user interface to interact with the game, allowing players to make moves, view game state, and access game controls.
    
-5. **Extend Functionality (Optional)**: Extend the project to add additional features such as AI opponents, multiplayer support, or advanced game analysis tools.
 
 ## Tests
 
