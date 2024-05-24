@@ -35,3 +35,4 @@ To use this project in your own Java application:
 ## Tests
 
 for test run GameLogicTest.java, TestA.java
+Expected to see all Junit test passed
